@@ -42,15 +42,8 @@
             <string>choices = ds_list_create();
 
 colour = c_menu-20;
-//add_choice = instance_create(x,y,obj_choices_add);
 
-
-repeat(0)
-{
-    var c = instance_create(x,y,obj_bchoice);
-        c.owner = id;
-    ds_list_add(choices,c);
-}
+owner = noone;
 </string>
           </argument>
         </arguments>
@@ -131,6 +124,9 @@ ds_list_destroy(choices);
             <string>targetwidth = width;
 targetheight = height;
 resize = false;
+
+if(owner != noone)
+    owner.output.link = id;
 
 /*
 with(obj_bubble)

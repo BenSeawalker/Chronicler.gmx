@@ -50,6 +50,8 @@ switch(object_index)
 }
 
 
+shift_y = 0;
+
 selected = false;
 highlight = false;
 resize = false;

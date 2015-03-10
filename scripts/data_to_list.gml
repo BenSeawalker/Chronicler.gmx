@@ -10,6 +10,7 @@ var pv = ds_map_create();
     ds_map_add(pv,"gamestats",string(gamestats));
     ds_map_add(pv,"scene_count",real(scene_list.scene_count));
     ds_map_add(pv,"cur_scene",string(current_scene.title.text));
+    ds_map_add(pv,"save_state",real(use_choice_bubbles));
     stats_path = string(stats_path);
     ds_map_add(pv,"stats_path",string(stats_path));
     //scenes
@@ -49,6 +50,7 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
         {
             with(bubbles[| i])
             {
+                //common vars
                 var mp = ds_map_create();
                 ds_map_add(mp,"scene",string(other.title.text));
                 ds_map_add(mp,"UID",real(UID));
@@ -57,9 +59,14 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                 ds_map_add(mp,"width",real(width));
                 ds_map_add(mp,"height",real(height));
                 ds_map_add(mp,"col",real(colour));
+                if(use_choice_bubbles)
+                    ds_map_add(mp,"shift_y",real(shift_y));
+                else
+                    ds_map_add(mp,"shift_y",0);
                 
                 
                 
+                //unique vars
                 switch(object_index)
                 {
                     //bubble
@@ -68,11 +75,37 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                         ds_map_add(mp,"title",string(title.text));
                         ds_map_add(mp,"tbox",string(tbox.text));
                         ds_map_add(mp,"output",get_UID(output.link));
+                        
+                        for(var ci=1;ci<ds_list_size(choices)-1;ci++)
+                        {
+                            var cmp = ds_map_create();
+                            
+                            with(choices[| ci])
+                            {
+                                ds_map_add(cmp,"type","choice");
+                                ds_map_add(cmp,"index",real(ci));
+                                ds_map_add(cmp,"x",x);
+                                ds_map_add(cmp,"y",y);
+                                ds_map_add(cmp,"width",real(width));
+                                ds_map_add(cmp,"height",real(height));
+                                ds_map_add(cmp,"col",real(colour));
+                                
+                                ds_map_add(cmp,"owner",get_UID(owner));
+                                ds_map_add(cmp,"link",get_UID(link));
+                                
+                                ds_map_add(cmp,"cbox",string(cbox.text));
+                                ds_map_add(cmp,"tbox",string(tbox.text));
+                                
+                                ds_list_add(datalist,ds_map_write(cmp));
+                            }
+                            ds_map_destroy(cmp);
+                        }
                     break;
                     
                     //choice_bubble
                     case obj_choice_bubble:
                         ds_map_add(mp,"type","choice_bubble");
+                        ds_map_add(mp,"owner",get_UID(owner));
                             //var clist = ds_list_create();
                             for(var ci=0;ci<ds_list_size(choices);ci++)
                             {
@@ -85,10 +118,9 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                                     ds_map_add(cmp,"x",x);
                                     ds_map_add(cmp,"y",y);
                                     ds_map_add(cmp,"width",real(width));
-                                    //ds_map_add(mp,"height",real(height));
-                                    //ds_map_add(cmp,"col",real(colour));
                                     
                                     ds_map_add(cmp,"owner",get_UID(owner));
+                                    ds_map_add(cmp,"parent",get_UID(owner.owner));
                                     ds_map_add(cmp,"link",get_UID(output.link));
                                     
                                     ds_map_add(cmp,"cbox",string(cbox.text));
@@ -98,8 +130,6 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                                 }
                                 ds_map_destroy(cmp);
                             }
-                       // ds_map_add(mp,"choices",ds_list_write(clist));
-                            //ds_list_destroy(clist);
                     break;
                     
                     //condition

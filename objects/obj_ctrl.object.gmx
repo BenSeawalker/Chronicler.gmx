@@ -31,7 +31,7 @@ globalvar GUID, group_select, save_path,project_path,stats_path,saved, project_n
             var_screen,GUI_mode, aspect_ratio,view_scale,
             clipboard, pause, lag_time, actionlist, refactorvars, use_choice_bubbles;
             
-program_version = "1.3.3";
+program_version = "1.3.4";
 GUID = 0;
 project_name = "";
 save_path = "";
@@ -44,7 +44,7 @@ clipboard = ds_list_create();
 lag_time = 1;
 pause = false;
 refactorvars = true;
-use_choice_bubbles = true;
+use_choice_bubbles = 1;
 
 instance_create(mouse_x,mouse_y,obj_mlink);
 instance_create(0,0,obj_undo);
@@ -458,11 +458,11 @@ var editing = textbox_focus;
 if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible &amp;&amp; textbox_focus = -1)
 {
     var scale = 0.125;
-    if(mouse_wheel_down() || (keyboard_check_pressed(ord('Q')) &amp;&amp; !editing))
+    if(mouse_wheel_down() || (keyboard_check_pressed(ord('Q'))))// &amp;&amp; !editing))
     {
         set_view_scale(max(view_scale-scale,scale));
     }
-    if(mouse_wheel_up() || (keyboard_check_pressed(ord('E')) &amp;&amp; !editing))
+    if(mouse_wheel_up() || (keyboard_check_pressed(ord('E'))))// &amp;&amp; !editing))
     {
         set_view_scale(min(view_scale+scale,2));
     }

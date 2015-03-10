@@ -9,7 +9,7 @@ var mw = 0;
 for(var i=0;i<ds_list_size(sg.scenes);i++)
 {
     sb = sg.scenes[| i];
-    if(sb.minwidth > mw) mw = sb.minwidth;
+    if(sb.minwidth > mw) mw = min(sb.minwidth,string_width("Startupscene"));
 }
 
 for(var i=0;i<ds_list_size(sg.scenes);i++)

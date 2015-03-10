@@ -61,6 +61,7 @@ if(lp != "" || dat)
     var save_version = real(string_replace_all(pv[? "version"],".",""));
     var cur_version = real(string_replace_all(program_version,".",""));
     var old_version = 126;
+    var save_state = real(pv[? "save_state"]);
     
     project_name = pv[? "project_name"];
     GUID = pv[? "GUID"];
@@ -145,8 +146,9 @@ if(lp != "" || dat)
                     UID = mp[? "UID"];
                     width = mp[? "width"];
                     height = mp[? "height"];
-                    targetwidth = width;
-                    targetheight = height;
+                        targetwidth = width;
+                        targetheight = height;
+                    shift_y = real(mp[?"shift_y"]);
                     if(save_version>=130)colour = mp[? "col"];
                     
                     tbox.text = mp[? "tbox"];
@@ -168,8 +170,8 @@ if(lp != "" || dat)
                     height = mp[? "height"];
                     targetwidth = width;
                     targetheight = height;
-                    //colour = mp[? "col"];
                     tbox.text = mp[? "tbox"];
+                    shift_y = real(mp[?"shift_y"]);
                     
                     out_true.link = mp[? "out_true"];
                     out_false.link = mp[? "out_false"];
@@ -185,7 +187,7 @@ if(lp != "" || dat)
                     height = mp[? "height"];
                     targetwidth = width;
                     targetheight = height;
-                    //colour = mp[? "col"];
+                    shift_y = real(mp[?"shift_y"]);
                     
                     tbox.text = mp[? "tbox"];
                     output.link = mp[? "output"];
@@ -196,28 +198,55 @@ if(lp != "" || dat)
             break;
             
             case "choice_bubble":
-                with(instance_create(mp[? "x"],mp[? "y"],obj_choice_bubble))
+                if(use_choice_bubbles)
                 {
-                    UID = mp[? "UID"];
-                    width = mp[? "width"];
-                    height = mp[? "height"];
+                    with(instance_create(mp[? "x"],mp[? "y"],obj_choice_bubble))
+                    {
+                        UID = mp[? "UID"];
+                        width = mp[? "width"];
+                        height = mp[? "height"];
+                        shift_y = real(mp[?"shift_y"]);
+                        owner = mp[?"owner"];
+                    }
                 }
             break;
 
-            //import old data
             case "choice":
-                with(instance_create(mp[? "x"],mp[? "y"],obj_bchoice))
+                if(use_choice_bubbles)
                 {
-                    index = mp[? "index"];
-                    width = mp[? "width"];
-                    //height = mp[? "height"];
-                    //colour = mp[? "col"];
-                    
-                    owner = mp[? "owner"];
-                    output.link = mp[? "link"];
-                    
-                    cbox.text = mp[? "cbox"];
-                    tbox.text = mp[? "tbox"];
+                    with(instance_create(mp[? "x"],mp[? "y"],obj_bchoice))
+                    {
+                        index = mp[? "index"];
+                        width = mp[? "width"];
+                        
+                        owner = mp[? "owner"];
+                        output.link = mp[? "link"];
+                        
+                        cbox.text = mp[? "cbox"];
+                        tbox.text = mp[? "tbox"];
+                    }
+                }
+                else
+                {
+                    with(instance_create(mp[? "x"],mp[? "y"],obj_choice))
+                    {
+                        index = mp[? "index"];
+                        width = mp[? "width"];
+                        if(save_state)
+                        {
+                            owner = mp[? "parent"];
+                        }
+                        else
+                        {
+                            height = mp[? "height"];
+                            colour = mp[? "col"];
+                            owner = mp[? "owner"];
+                        }
+                        link = mp[? "link"];
+                        
+                        cbox.text = mp[? "cbox"];
+                        tbox.text = mp[? "tbox"];
+                    }
                 }
             break;
             
@@ -244,20 +273,26 @@ if(lp != "" || dat)
     with(obj_action)
     {
         output.link = get_obj_from_UID(output.link);
-        show_debug_message(string(output.link));
+    }
+    with(obj_choice_bubble)
+    {
+        owner = get_obj_from_UID(owner);
     }
     ///*
     
     //sort choices by index
-    var clist = 0;//ds_list_create();
+    var clist = 0;
     var len = 0;
-    with(obj_bchoice) {clist[len] = id; len++}//ds_list_add(clist,id);
+    if(use_choice_bubbles)
+        with(obj_bchoice) {clist[len] = id; len++}
+    else
+        with(obj_choice) {clist[len] = id; len++}
     
     for(var i=0; i<len; i+=1)
     {
        for (var j=1; j<(len-i); j+=1)
        {
-          if (clist[j-1] > clist[j])
+          if (clist[j-1].index > clist[j].index)
           {
              var tmp = clist[j-1];
              clist[j-1] = clist[j];
@@ -267,46 +302,72 @@ if(lp != "" || dat)
     }
     for(var i=0;i<len;i++)
     {
-        
         with(clist[i])
         {
-            var cb = get_obj_from_UID(owner);
-            output.link = get_obj_from_UID(output.link);
             
-            if(cb.object_index != obj_choice_bubble)
+            if(use_choice_bubbles)
             {
-                //old data
-                if(cb.output.link == noone || cb.output.link.object_index != obj_choice_bubble || cb.output.link == noone)
-                {
-                    var ncb = instance_create(cb.x,cb.y+cb.targetheight+60,obj_choice_bubble);
-                    cb.output.link = ncb;
-                    cb = ncb;
-                }
-                else
-                    cb = cb.output.link;
-            }
+                var cb = get_obj_from_UID(owner);
+                output.link = get_obj_from_UID(output.link);
             
-            owner = cb;
-                owner.colour = colour;
-                    output.colour = colour;
+                if(cb.object_index != obj_choice_bubble)
+                {
+                    //old data
+                    if(cb.output.link == noone || cb.output.link.object_index != obj_choice_bubble || cb.output.link == noone)
+                    {
+                        var ncb = instance_create(cb.x,cb.y+cb.targetheight+60,obj_choice_bubble);
+                        cb.output.link = ncb;
+                        ncb.owner = cb;
+                        cb = ncb;
+                    }
+                    else
+                        cb = cb.output.link;
+                }
+                
+                owner = cb;
+                //owner.colour = colour;
+                //output.colour = colour;
                 ds_list_add(owner.choices,id);
+            }
+            else
+            {
+                owner = get_obj_from_UID(owner);
+                link = get_obj_from_UID(link);
+                
+                add_choice_to_bubble(owner,id);
+            }
         }
     }
     
-    if(save_version < 134)
+    if(use_choice_bubbles)// && save_version < 134)
     {
-        with(obj_choice_bubble)
+        if(!save_state || save_version < 134)
         {
-            with(obj_parent_bubble)
+            with(obj_choice_bubble)
             {
-                if(y>other.y)
-                    y += (ds_list_size(other.choices)*other.choices[|0].height + 300);
+                var shift_amount = (ds_list_size(choices)*choices[|0].height + 300);
+                with(obj_parent_bubble)
+                {
+                    if(y > other.y)
+                    {
+                        shift_y += shift_amount;
+                        y = ystart + shift_y;
+                    }
+                }
+                with(obj_bchoice)
+                {
+                    if(y > other.y)
+                        y += shift_amount;
+                }
             }
-            with(obj_bchoice)
-            {
-                if(y>other.y)
-                    y += (ds_list_size(other.choices)*other.choices[|0].height + 300);
-            }
+        }
+    }
+    else
+    {
+        with(obj_parent_bubble)
+        {
+            y -= shift_y;
+            shift_y = 0;
         }
     }
     

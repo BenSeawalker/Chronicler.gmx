@@ -45,12 +45,28 @@ if(selected)
 {
     selected = false;
     
-    var c = create_choice("*");
-        c.owner = owner;
-        c.selected = true;
-    
-    add_choice_to_bubble(owner,c);
+    if(use_choice_bubbles)
+    {
+        var cb = instance_create(owner.x,owner.y+owner.height+60,obj_choice_bubble);
+        cb.owner = owner;
+        owner.output.link = cb;
+        cb.selected = true;
+        
+        var c = instance_create(cb.x,cb.y,obj_bchoice);
+            c.owner = cb;
+        ds_list_add(cb.choices,c);
+    }
+    else
+    {
+        var c = create_choice("*");
+            c.owner = owner;
+            c.selected = true;
+        
+        add_choice_to_bubble(owner,c);
+    }
 }
+
+
 
 /*
 if(selected)

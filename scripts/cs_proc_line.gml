@@ -83,21 +83,17 @@ var nmp = ds_map_create();
                 ds_map_replace(nmp,"type","choice");
                 var data = mp[?"choices"];
                 ds_map_replace(nmp,"data",data);
-                //show_debug_message("-----------------------"+string(index));
                 for(var iii=0;iii<ds_list_size(data);iii++)
                 {
                     var mp2 = data[|iii];
+                    
                     var ind = ds_list_find_index(lns,mp2)+1;
-                        //show_debug_message(mp2[?"line"]);
                         var block = cs_proc_block(lns,ind);
                         var nind = ds_list_size(block)-1;
                         ds_map_replace(nmp,"index",block[|nind]);
                             ds_list_delete(block,nind);
-                            
-                            
                     ds_map_replace(mp2,"data",block);
                 }
-                //show_debug_message("***********************"+string(index));
             break;
             
             case "fake_choice":

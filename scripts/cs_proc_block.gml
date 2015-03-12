@@ -16,11 +16,24 @@ var indent = ds_map_find_value(lns[|index],"indent");
             var obj = cs_proc_line(lns,i);
             if(obj != -1)
             {
+                switch(obj[?"type"])
+                {
+                    case "bubble":
+                    case "choice":
+                    case "fake_choice":
+                    case "scene_list":
+                    case "if":
+                    case "elseif":
+                    case "else":
+                        i = obj[?"index"];
+                    break;
+                }
+                /*
                 if(obj[?"type"] == "bubble" || obj[?"type"] == "choice" || obj[?"type"] == "fake_choice" || obj[?"type"] == "scene_list" ||
                     obj[?"type"] == "if" || obj[?"type"] == "elseif" || obj[?"type"] == "else")
                 {
                     i = obj[?"index"];
-                }
+                }*/
                 ds_list_add(objs,obj);
             }
         }

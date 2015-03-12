@@ -12,14 +12,15 @@ var lines,size;
 
 if(is_file)
 {
-    var f = file_text_open_read(cs);
-        while(!file_text_eof(f))
+    var f = FS_file_text_open_read(cs);
+        while(!FS_file_eof(f))
         {
-            lines[|size] = file_text_read_string(f);
-                file_text_readln(f);
+            lines[|size] = FS_file_text_read_string(f);
+                FS_file_text_readln(f);
+                //show_debug_message(string(lines[|size]));
             size++;
         }
-    file_text_close(f);
+    FS_file_text_close(f);
 }
 else
 {
@@ -37,7 +38,7 @@ else
         }
     }
 }
-
+//show_debug_message(string(size));
 
 //mark lines
 //var uid = 0;
@@ -49,7 +50,6 @@ for(var i=0;i<ds_list_size(lines);i++)
     var mp = ds_map_create();
         var line = lines[|i];
         lines[|i] = mp;
-        
         ds_map_add(mp,"line",string_trim(line,false));
         ds_map_add(mp,"indent",cs_get_indent(line));
         //ds_map_add(mp,"uid",uid++);
@@ -162,12 +162,13 @@ ds_list_destroy(objs);
 */
 
 //cleanup
+/*
 for(var i=0;i<ds_list_size(lines);i++)
 {
     ds_map_destroy(lines[|i])
 }
 ds_list_destroy(lines);
-
+*/
 ds_list_destroy(lastchoice);
 
 

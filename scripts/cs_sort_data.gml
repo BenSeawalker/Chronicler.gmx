@@ -33,7 +33,6 @@ for(var i=0;i<ds_list_size(lst);i++)
     }
     else if(mp[?"type"] == "bubble")
     {
-        //output += string(mp[?"data"])+chr(10);
         for(var ii=i+1;ii<ds_list_size(lst);ii++)
         {
             var mp2 = ds_list_find_value(lst,ii);
@@ -41,8 +40,6 @@ for(var i=0;i<ds_list_size(lst);i++)
             
             if((mp2[?"type"] == "choice" || mp2[?"type"] == "fake_choice") && (ii-i)>1)
             {
-                //show_debug_message("-----------------------------");
-                //show_debug_message("shifting: "+chr(10)+mp[?"data"]+chr(10)+"down "+string(ii-i-1)+" lines.");
                 ds_list_insert(lst,ii,mp);
                 ds_list_delete(lst,i);
                 break;

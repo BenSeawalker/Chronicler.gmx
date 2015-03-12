@@ -133,6 +133,7 @@
     </scripts>
     <script>scripts\draw_connection_path.gml</script>
     <script>scripts\draw_connection_path_new.gml</script>
+    <script>scripts\get_keys.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

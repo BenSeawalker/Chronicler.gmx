@@ -174,6 +174,7 @@ var fm = instance_create(i,0,obj_file_menu);
     //left
     add_file_component(fm,fm_left,spr_icons,49,new_project_ask,"New Project");
     add_file_component(fm,fm_left,spr_icons,101,load_chronicler_project,"Load Project");
+    add_file_component(fm,fm_left,spr_icons,162,load_cs_project,"Import Project");
     add_file_component(fm,fm_left,spr_icons,15,save_project,"Save Project");
     add_file_component(fm,fm_left,spr_icons,160,save_project_as,"Save Project As");
     //right

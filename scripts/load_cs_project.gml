@@ -1,6 +1,7 @@
 //var path = get_open_filename("ChoiceScript|startup.txt","startup.txt");
 var path = "C:\Users\Ben Seawalker\Downloads\choicescript-master\choicescript-master\web - Copy - Copy\mygame\scenes\startup_old.txt";
     path = "C:\Users\Ben Seawalker\Downloads\choicescript-master\choicescript-master\web\mygame\scenes\startup.txt";
+    path = "C:\Users\Ben Seawalker\Documents\GameMaker\Builds\Chronicler\Dragon\dragon_startup.txt";
 if(path != "")
 {
     obj_ctrl.alarm[1] = room_speed*60;

@@ -16,6 +16,7 @@ if(save_path != "")
 
         var file = FS_file_text_open_write(save_path);
             FS_file_text_write_string(file,ds_list_write(lst));
+            if(FS_file_bad(file)) show_debug_message("error:"+save_path);
         FS_file_text_close(file);
         show_debug_message("Output file: "+save_path);
         

@@ -123,7 +123,9 @@
         <script>scripts\load_cs_project.gml</script>
         <script>scripts\cs_proc_data.gml</script>
         <script>scripts\cs_proc_stats.gml</script>
+        <script>scripts\cs_proc_scenes.gml</script>
         <script>scripts\cs_arrange_bubbles.gml</script>
+        <script>scripts\cs_cleanup.gml</script>
       </scripts>
       <scripts name="Menu items">
         <script>scripts\show_license.gml</script>
@@ -138,6 +140,7 @@
     <script>scripts\get_keys.gml</script>
     <script>scripts\copy_bubble.gml</script>
     <script>scripts\link_bubbles.gml</script>
+    <script>scripts\reduce_path.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

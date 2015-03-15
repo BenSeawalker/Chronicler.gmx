@@ -9,9 +9,9 @@ if(sp != "")
     save_path = sp;
     project_path = sp;
     var lst = data_to_list();
-        var file = FS_file_text_open_write(save_path);
-            FS_file_text_write_string(file,ds_list_write(lst));
-        FS_file_text_close(file);
+        var file = file_text_open_write(save_path);
+            file_text_write_string(file,ds_list_write(lst));
+        file_text_close(file);
     ds_list_destroy(lst);
     show_debug_message("Output file: "+save_path);
     

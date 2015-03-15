@@ -717,199 +717,201 @@ with(obj_parent_bubble)
      if(keyboard_check_pressed(vk_delete) &amp;&amp; group_selected) instance_destroy();
 }
 
-
-if(keyboard_check(vk_control) &amp;&amp; (keyboard_check_pressed(ord('C')) || keyboard_check_pressed(ord('X'))))
+if(textbox_focus == -1)
 {
-    //clear clipboard data
-    clear_clipboard();
-    
-    //add highlighted bubbles to clipboard
-    with(obj_parent_bubble) if(group_selected || selected)
+    if(keyboard_check(vk_control) &amp;&amp; (keyboard_check_pressed(ord('C')) || keyboard_check_pressed(ord('X'))))
     {
-        if(object_index == obj_choice_bubble)
-        {
-            var mp2 = copy_bubble(owner);
-            ds_list_add(clipboard,mp2);
-        }
+        //clear clipboard data
+        clear_clipboard();
         
-        var mp = copy_bubble(id);
-        ds_list_add(clipboard,mp);
-    }
-}
-
-if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
-{
-    
-    //paste bubbles from clipboard
-    if(keyboard_check(vk_control) &amp;&amp; keyboard_check_pressed(ord('V')))
-    {
-        var copied = ds_list_create();
-        for(var i=0;i&lt;ds_list_size(clipboard);i++)
+        //add highlighted bubbles to clipboard
+        with(obj_parent_bubble) if(group_selected || selected)
         {
-            var mp = clipboard[|i];
-            with(instance_create(mouse_x+mp[?"x"],mouse_y+mp[?"y"],mp[?"type"]))
+            if(object_index == obj_choice_bubble)
             {
-                ds_list_add(copied,id);
-                TUID = mp[?"UID"];
-                
-                tbox.text = mp[?"tbox"];
-                
-                switch(object_index)
+                var mp2 = copy_bubble(owner);
+                ds_list_add(clipboard,mp2);
+            }
+            
+            var mp = copy_bubble(id);
+            ds_list_add(clipboard,mp);
+        }
+    }
+    
+    if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
+    {
+        
+        //paste bubbles from clipboard
+        if(keyboard_check(vk_control) &amp;&amp; keyboard_check_pressed(ord('V')))
+        {
+            var copied = ds_list_create();
+            for(var i=0;i&lt;ds_list_size(clipboard);i++)
+            {
+                var mp = clipboard[|i];
+                with(instance_create(mouse_x+mp[?"x"],mouse_y+mp[?"y"],mp[?"type"]))
                 {
-                    case obj_bubble:
-                        title.text = mp[?"title"];
+                    ds_list_add(copied,id);
+                    TUID = mp[?"UID"];
+                    
+                    tbox.text = mp[?"tbox"];
+                    
+                    switch(object_index)
+                    {
+                        case obj_bubble:
+                            title.text = mp[?"title"];
+                            
+                            width = mp[?"width"];
+                            height = mp[?"height"];
+                            targetwidth = width;
+                            targetheight = height;
+                            
+                            colour = mp[?"colour"];
+                            
+                            output.link = mp[?"output"];
+                            
+                            var s = 20;
+                            textbox_draw(tbox,x+5,y+5,x+width-s-5,y+width-10,false);
+                            
+                            var cs = mp[?"choices"];
+                                for(var ii=1;ii&lt;ds_list_size(cs)-1;ii++)
+                                {
+                                    var cm = cs[|ii];
+                                    var c = create_choice(cm[?"tbox"]);
+                                        c.cbox.text = cm[?"cbox"];
+                                        c.link = cm[?"link"];
+                                        c.owner = id;
+                                    add_choice_to_bubble(id,c);
+                                }
+                            
+                        break;
                         
-                        width = mp[?"width"];
-                        height = mp[?"height"];
-                        targetwidth = width;
-                        targetheight = height;
+                        case obj_condition:
+                            out_true.link = mp[?"out_true"];
+                                out_true.owner = id;
+                            out_false.link = mp[?"out_false"];
+                                out_false.owner = id;
+                        break;
                         
-                        colour = mp[?"colour"];
+                        case obj_action:
+                            output.link = mp[?"output"];
+                                output.owner = id;
+                        break;
                         
-                        output.link = mp[?"output"];
-                        
-                        var s = 20;
-                        textbox_draw(tbox,x+5,y+5,x+width-s-5,y+width-10,false);
-                        
-                        var cs = mp[?"choices"];
-                            for(var ii=1;ii&lt;ds_list_size(cs)-1;ii++)
+                        case obj_choice_bubble:
+                            var cs = mp[?"choices"];
+                            for(var ii=0;ii&lt;ds_list_size(cs);ii++)
                             {
+                                show_debug_message(string(ii));
                                 var cm = cs[|ii];
-                                var c = create_choice(cm[?"tbox"]);
+                                var c = instance_create(x,y,obj_bchoice);//create_choice(cm[?"tbox"]);
+                                    c.tbox.text = cm[?"tbox"];
                                     c.cbox.text = cm[?"cbox"];
-                                    c.link = cm[?"link"];
+                                    c.output.link = cm[?"link"];
                                     c.owner = id;
                                 add_choice_to_bubble(id,c);
                             }
-                        
-                    break;
+                        break;
+                    }
                     
-                    case obj_condition:
-                        out_true.link = mp[?"out_true"];
-                            out_true.owner = id;
-                        out_false.link = mp[?"out_false"];
-                            out_false.owner = id;
-                    break;
                     
-                    case obj_action:
-                        output.link = mp[?"output"];
-                            output.owner = id;
-                    break;
-                    
-                    case obj_choice_bubble:
-                        var cs = mp[?"choices"];
-                        for(var ii=0;ii&lt;ds_list_size(cs);ii++)
-                        {
-                            show_debug_message(string(ii));
-                            var cm = cs[|ii];
-                            var c = instance_create(x,y,obj_bchoice);//create_choice(cm[?"tbox"]);
-                                c.tbox.text = cm[?"tbox"];
-                                c.cbox.text = cm[?"cbox"];
-                                c.output.link = cm[?"link"];
-                                c.owner = id;
-                            add_choice_to_bubble(id,c);
-                        }
-                    break;
                 }
-                
-                
             }
-        }
-        //connect them up
-        for(var i=0;i&lt;ds_list_size(copied);i++)
-        {
-            with(copied[|i])
+            //connect them up
+            for(var i=0;i&lt;ds_list_size(copied);i++)
             {
-                switch(object_index)
+                with(copied[|i])
                 {
-                    case obj_bubble:
-                        var found = false;
-                        for(var iii=0;iii&lt;ds_list_size(copied);iii++)
-                        {
-                            if(output.link == copied[|iii].TUID)
+                    switch(object_index)
+                    {
+                        case obj_bubble:
+                            var found = false;
+                            for(var iii=0;iii&lt;ds_list_size(copied);iii++)
                             {
-                                output.link = copied[|iii];
-                                found = true;
-                                break;
+                                if(output.link == copied[|iii].TUID)
+                                {
+                                    output.link = copied[|iii];
+                                    found = true;
+                                    break;
+                                }
                             }
-                        }
-                        if(!found)
-                            output.link = noone;
+                            if(!found)
+                                output.link = noone;
+                            
+                            for(var ii=1;ii&lt;ds_list_size(choices)-1;ii++)
+                            {
+                                var c = choices[|ii];
+                                found = false;
+                                for(var iii=0;iii&lt;ds_list_size(copied);iii++)
+                                {
+                                    if(c.link == copied[|iii].TUID)
+                                    {
+                                        c.link = copied[|iii];
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if(!found)
+                                    c.link = noone;
+                            }
+                        break;
                         
-                        for(var ii=1;ii&lt;ds_list_size(choices)-1;ii++)
-                        {
-                            var c = choices[|ii];
-                            found = false;
+                        case obj_condition:
+                            var ft = false;
+                            var ff = false;
                             for(var iii=0;iii&lt;ds_list_size(copied);iii++)
                             {
-                                if(c.link == copied[|iii].TUID)
+                                if(out_true.link == copied[|iii].TUID)
                                 {
-                                    c.link = copied[|iii];
+                                    out_true.link = copied[|iii];
+                                    ft = true;
+                                }
+                                if(out_false.link == copied[|iii].TUID)
+                                {
+                                    out_false.link = copied[|iii];
+                                    ff = true;
+                                }
+                            }
+                            if(!ft)
+                                out_true.link = noone;
+                            if(!ff)
+                                out_false.link = noone;
+                        break;
+                        
+                        case obj_action:
+                            var found = false;
+                            for(var iii=0;iii&lt;ds_list_size(copied);iii++)
+                            {
+                                if(output.link == copied[|iii].TUID)
+                                {
+                                    output.link = copied[|iii];
                                     found = true;
                                     break;
                                 }
                             }
                             if(!found)
-                                c.link = noone;
-                        }
-                    break;
-                    
-                    case obj_condition:
-                        var ft = false;
-                        var ff = false;
-                        for(var iii=0;iii&lt;ds_list_size(copied);iii++)
-                        {
-                            if(out_true.link == copied[|iii].TUID)
+                                output.link = noone;
+                        break;
+                        
+                        case obj_choice_bubble:
+                            for(var ii=0;ii&lt;ds_list_size(choices);ii++)
                             {
-                                out_true.link = copied[|iii];
-                                ft = true;
-                            }
-                            if(out_false.link == copied[|iii].TUID)
-                            {
-                                out_false.link = copied[|iii];
-                                ff = true;
-                            }
-                        }
-                        if(!ft)
-                            out_true.link = noone;
-                        if(!ff)
-                            out_false.link = noone;
-                    break;
-                    
-                    case obj_action:
-                        var found = false;
-                        for(var iii=0;iii&lt;ds_list_size(copied);iii++)
-                        {
-                            if(output.link == copied[|iii].TUID)
-                            {
-                                output.link = copied[|iii];
-                                found = true;
-                                break;
-                            }
-                        }
-                        if(!found)
-                            output.link = noone;
-                    break;
-                    
-                    case obj_choice_bubble:
-                        for(var ii=0;ii&lt;ds_list_size(choices);ii++)
-                        {
-                            var c = choices[|ii];
-                            found = false;
-                            show_debug_message(string(ii));
-                            for(var iii=0;iii&lt;ds_list_size(copied);iii++)
-                            {
-                                if(c.output.link == copied[|iii].TUID)
+                                var c = choices[|ii];
+                                found = false;
+                                show_debug_message(string(ii));
+                                for(var iii=0;iii&lt;ds_list_size(copied);iii++)
                                 {
-                                    c.output.link = copied[|iii];
-                                    found = true;
-                                    break;
+                                    if(c.output.link == copied[|iii].TUID)
+                                    {
+                                        c.output.link = copied[|iii];
+                                        found = true;
+                                        break;
+                                    }
                                 }
+                                if(!found)
+                                    c.output.link = noone;
                             }
-                            if(!found)
-                                c.output.link = noone;
-                        }
-                    break;
+                        break;
+                    }
                 }
             }
         }

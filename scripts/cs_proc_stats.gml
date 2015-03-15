@@ -1,22 +1,6 @@
 ///cs_proc_stats(path)
 var path;
-    path = argument0;
-    
-var found = false;
-var sl = string_length(path);
-var i = sl;
-while(i > 1)
-{
-    if(string_copy(path,i,sl) == ".txt")
-        found = true;
-    
-    if(string_char_at(path,i) == "\")
-        break;
-    
-    i--;
-}
-if(found)
-    path = string_copy(path,1,i);
+    path = reduce_path(argument0,"txt");
 
 path += "choicescript_stats.txt";
 

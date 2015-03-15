@@ -1,7 +1,7 @@
-//var path = get_open_filename("ChoiceScript|startup.txt","startup.txt");
-var path = "C:\Users\Ben Seawalker\Downloads\choicescript-master\choicescript-master\web - Copy - Copy\mygame\scenes\startup_old.txt";
-    path = "C:\Users\Ben Seawalker\Downloads\choicescript-master\choicescript-master\web\mygame\scenes\startup.txt";
-    path = "C:\Users\Ben Seawalker\Documents\GameMaker\Builds\Chronicler\Dragon\dragon_startup.txt";
+var path = get_open_filename("ChoiceScript|startup.txt","startup.txt");
+//var path = "C:\Users\Ben Seawalker\Downloads\choicescript-master\choicescript-master\web - Copy - Copy\mygame\scenes\startup_old.txt";
+//    path = "C:\Users\Ben Seawalker\Downloads\choicescript-master\choicescript-master\web\mygame\scenes\startup.txt";
+//    path = "C:\Users\Ben Seawalker\Documents\GameMaker\Builds\Chronicler\Dragon\dragon_startup.txt";
 if(path != "")
 {
     obj_ctrl.alarm[1] = room_speed*60;
@@ -11,9 +11,13 @@ if(path != "")
     gamevars = "";
     with(obj_parent_bubble)instance_destroy();
     
-    cs_proc_data(cs_to_data(path,true),0,0);
+    var csdata = cs_to_data(path,true);
+    
+    cs_proc_data(csdata,0,0);
     
     cs_proc_stats(path);
+    
+    cs_proc_scenes(csdata,path);
     
     save_variables();
     switch_GUI_mode(true);

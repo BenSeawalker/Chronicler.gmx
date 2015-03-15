@@ -17,7 +17,6 @@ if(is_file)
         {
             lines[|size] = FS_file_text_read_string(f);
                 FS_file_text_readln(f);
-                //show_debug_message(string(lines[|size]));
             size++;
         }
     FS_file_text_close(f);

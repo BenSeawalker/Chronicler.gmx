@@ -150,6 +150,7 @@ for(i=0;i<ds_list_size(lst);i++)
                                 {
                                     tbox.text = string_replace(mp4,"#","");
                                     owner = other.id;
+                                    output.link = noone;
                                     ds_list_add(other.choices,id);
                                 }
                             }

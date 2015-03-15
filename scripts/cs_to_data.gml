@@ -147,11 +147,13 @@ for(var i=0;i<ds_list_size(lines);i++)
 var objs = cs_proc_block(lines,0);
 
 cs_sort_data(objs);
+
+/*
 //debug
 var fout = FS_file_text_open_write("C:\Users\Ben Seawalker\Documents\GameMaker\Builds\Chronicler\Dragon\output.txt");
     FS_file_text_write_string(fout,cs_debug(objs));
 FS_file_text_close(fout);
-
+*/
 /*
 for(var i=0;i<ds_list_size(objs);i++)
 {

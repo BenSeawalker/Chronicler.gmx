@@ -13,6 +13,8 @@ if(path != "")
     
     cs_proc_data(cs_to_data(path,true),0,0);
     
+    cs_proc_stats(path);
+    
     save_variables();
     switch_GUI_mode(true);
 }

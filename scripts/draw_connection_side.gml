@@ -4,59 +4,63 @@ i = argument0*8;
 c = argument1;
 l = argument2;
 col = argument3;
-///*
-offset = 24+i;
-ml = (l.object_index==obj_bubble);//(l.object_index != obj_mlink);
 
-x1 = c.x+c.width;
-y1 = c.y+c.height/2;
-x2 = l.x+l.width/2;
-y2 = l.y+l.height/2;
-
-dx = (x2-x1)/2;
-dy = (y2-y1)/2;
-
-//initial line
-draw_line_colour(x1+offset,y1,x1,y1,col,col);
-
-//horizontal
-if(abs(dy)<offset+120+30*ml)
+if(c != noone && l != noone)
 {
+    ///*
+    offset = 24+i;
+    ml = (l.object_index==obj_bubble);//(l.object_index != obj_mlink);
     
-    //right
-    if(dx>0)
+    x1 = c.x+c.width;
+    y1 = c.y+c.height/2;
+    x2 = l.x+l.width/2;
+    y2 = l.y+l.height/2;
+    
+    dx = (x2-x1)/2;
+    dy = (y2-y1)/2;
+    
+    //initial line
+    draw_line_colour(x1+offset,y1,x1,y1,col,col);
+    
+    //horizontal
+    if(abs(dy)<offset+120+30*ml)
     {
-        draw_line_colour(x1+offset,y1,x1+offset,y2+i,col,col);
-        draw_arrow_colour(x1+offset,y2+i,l.x,y2+i,16,col);
-        //draw_line_colour(x1,y1+offset,l.x-offset,y1+offset,col,col);
-        //draw_line_colour(l.x-offset,y1+offset,l.x-offset,y2+i,col,col);
-        //draw_arrow_colour(l.x-offset,y2+i,l.x,y2+i,16,col);
+        
+        //right
+        if(dx>0)
+        {
+            draw_line_colour(x1+offset,y1,x1+offset,y2+i,col,col);
+            draw_arrow_colour(x1+offset,y2+i,l.x,y2+i,16,col);
+            //draw_line_colour(x1,y1+offset,l.x-offset,y1+offset,col,col);
+            //draw_line_colour(l.x-offset,y1+offset,l.x-offset,y2+i,col,col);
+            //draw_arrow_colour(l.x-offset,y2+i,l.x,y2+i,16,col);
+        }
+        //left
+        else
+        {
+            draw_line_colour(x1+offset,y1,x1+offset,y2+i,col,col);
+            draw_arrow_colour(x1+offset,y2+i,l.x+l.width,y2+i,16,col);
+        }
+        
     }
-    //left
+    //vertical
+    // down
+    else if(dy>0)
+    {
+        draw_line_colour(x1+offset,y1,x1+offset,y1+dy,col,col);
+        draw_line_colour(x1+offset,y1+dy,x2+i,y1+dy,col,col);
+        draw_arrow_colour(x2+i,y1+dy,x2+i,l.y-30*ml,16,col);
+        //draw_line_colour(x1,y1+offset,x2+i,y1+offset,col,col);
+        //draw_arrow_colour(x2+i,y1+offset,x2+i,l.y-30*ml,16,col);
+    }
+    // up
     else
     {
-        draw_line_colour(x1+offset,y1,x1+offset,y2+i,col,col);
-        draw_arrow_colour(x1+offset,y2+i,l.x+l.width,y2+i,16,col);
+        draw_line_colour(x1+offset,y1,x1+offset,y1+dy,col,col);
+        draw_line_colour(x1+offset,y1+dy,x2+i,y1+dy,col,col);
+        //draw_line_colour(x1,y1+offset,x2+i,y1+offset,col,col);
+        draw_arrow_colour(x2+i,y1+dy,x2+i,l.y+l.height+30,16,col);
     }
-    
-}
-//vertical
-// down
-else if(dy>0)
-{
-    draw_line_colour(x1+offset,y1,x1+offset,y1+dy,col,col);
-    draw_line_colour(x1+offset,y1+dy,x2+i,y1+dy,col,col);
-    draw_arrow_colour(x2+i,y1+dy,x2+i,l.y-30*ml,16,col);
-    //draw_line_colour(x1,y1+offset,x2+i,y1+offset,col,col);
-    //draw_arrow_colour(x2+i,y1+offset,x2+i,l.y-30*ml,16,col);
-}
-// up
-else
-{
-    draw_line_colour(x1+offset,y1,x1+offset,y1+dy,col,col);
-    draw_line_colour(x1+offset,y1+dy,x2+i,y1+dy,col,col);
-    //draw_line_colour(x1,y1+offset,x2+i,y1+offset,col,col);
-    draw_arrow_colour(x2+i,y1+dy,x2+i,l.y+l.height+30,16,col);
 }
 //*/
 

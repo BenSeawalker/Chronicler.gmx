@@ -122,6 +122,7 @@
         </scripts>
         <script>scripts\load_cs_project.gml</script>
         <script>scripts\cs_proc_data.gml</script>
+        <script>scripts\cs_proc_stats.gml</script>
         <script>scripts\cs_arrange_bubbles.gml</script>
       </scripts>
       <scripts name="Menu items">

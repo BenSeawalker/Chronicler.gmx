@@ -1110,26 +1110,29 @@ ds_list_destroy(lst);
             <kind>1</kind>
             <string>///undo
 ///*
-if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible &amp;&amp; !group_select)
+if(ds_list_size(current_scene.bubbles) &lt;= 100)
 {
-    if((keyboard_check_released(vk_anykey) &amp;&amp; !keyboard_check_released(ord('Z'))
-        &amp;&amp; !keyboard_check(vk_control) &amp;&amp; !keyboard_check_released(vk_control) ||
-        mouse_check_button_released(mb_left)) &amp;&amp; !obj_scene_group.open)
+    if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible &amp;&amp; !group_select)
     {
-        with(obj_undo)
+        if((keyboard_check_released(vk_anykey) &amp;&amp; !keyboard_check_released(ord('Z'))
+            &amp;&amp; !keyboard_check(vk_control) &amp;&amp; !keyboard_check_released(vk_control) ||
+            mouse_check_button_released(mb_left)) &amp;&amp; !obj_scene_group.open)
         {
-            if(index&gt;0)
+            with(obj_undo)
             {
-                var lst = data_to_list();
-                    var dat = ds_list_write(lst);
-                if(dat != actions[|index-1] &amp;&amp; dat != string(actions[|index]))
+                if(index&gt;0)
+                {
+                    var lst = data_to_list();
+                        var dat = ds_list_write(lst);
+                    if(dat != actions[|index-1] &amp;&amp; dat != string(actions[|index]))
+                    {
+                        add_undo();
+                    }
+                }
+                else
                 {
                     add_undo();
                 }
-            }
-            else
-            {
-                add_undo();
             }
         }
     }

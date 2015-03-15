@@ -66,20 +66,6 @@ height = 1;
           </argument>
         </arguments>
       </action>
-      <action>
-        <libid>0</libid>
-        <id>0</id>
-        <kind>0</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>0</useapplyto>
-        <exetype>0</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-      </action>
     </event>
     <event eventtype="3" enumb="0">
       <action>

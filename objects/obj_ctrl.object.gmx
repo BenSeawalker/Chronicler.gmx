@@ -725,8 +725,8 @@ if(keyboard_check(vk_control) &amp;&amp; (keyboard_check_pressed(ord('C')) || ke
             ds_map_add(mp,"UID",UID);
             ds_map_add(mp,"x",x-mouse_x);
             ds_map_add(mp,"y",y-mouse_y);
-            
-            ds_map_add(mp,"tbox",tbox.text);
+            if(object_index != obj_choice_bubble)
+                ds_map_add(mp,"tbox",tbox.text);
             
             switch(object_index)
             {
@@ -754,6 +754,7 @@ if(keyboard_check(vk_control) &amp;&amp; (keyboard_check_pressed(ord('C')) || ke
                         }
                     ds_map_add(mp,"choices",cs);
                 break;
+                
                 case obj_condition:
                     var otp = -1;
                         if(out_true.link != noone) otp = out_true.link.UID;
@@ -763,12 +764,31 @@ if(keyboard_check(vk_control) &amp;&amp; (keyboard_check_pressed(ord('C')) || ke
                         if(out_false.link != noone) otp = out_false.link.UID;
                     ds_map_add(mp,"out_false",otp);
                 break;
+                
                 case obj_action:
                     var otp = -1;
                         if(output.link != noone) otp = output.link.UID;
                     ds_map_add(mp,"output",otp);
                 break;
+                
+                case obj_choice_bubble:
+                    var cs = ds_list_create();
+                        for(var i=0;i&lt;ds_list_size(choices);i++)
+                        {
+                            var c = choices[|i];
+                            var cm = ds_map_create();
+                                var otp = -1;
+                                    if(c.output.link != noone) otp = c.output.link.UID;
+                                ds_map_add(cm,"link",otp);
+                                ds_map_add(cm,"cbox",c.cbox.text)
+                                ds_map_add(cm,"tbox",c.tbox.text);
+                            ds_list_add(cs,cm);
+                        }
+                    ds_map_add(mp,"choices",cs);
+                break;
             }
+            
+            
         ds_list_add(clipboard,mp);
     }
 }
@@ -808,7 +828,7 @@ if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
                         textbox_draw(tbox,x+5,y+5,x+width-s-5,y+width-10,false);
                         
                         var cs = mp[?"choices"];
-                            for(var ii=0;ii&lt;ds_list_size(cs);ii++)
+                            for(var ii=1;ii&lt;ds_list_size(cs)-1;ii++)
                             {
                                 var cm = cs[|ii];
                                 var c = create_choice(cm[?"tbox"]);
@@ -819,15 +839,32 @@ if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
                             }
                         
                     break;
+                    
                     case obj_condition:
                         out_true.link = mp[?"out_true"];
                             out_true.owner = id;
                         out_false.link = mp[?"out_false"];
                             out_false.owner = id;
                     break;
+                    
                     case obj_action:
                         output.link = mp[?"output"];
                             output.owner = id;
+                    break;
+                    
+                    case obj_choice_bubble:
+                        var cs = mp[?"choices"];
+                        for(var ii=0;ii&lt;ds_list_size(cs);ii++)
+                        {
+                            show_debug_message(string(ii));
+                            var cm = cs[|ii];
+                            var c = instance_create(x,y,obj_bchoice);//create_choice(cm[?"tbox"]);
+                                c.tbox.text = cm[?"tbox"];
+                                c.cbox.text = cm[?"cbox"];
+                                c.output.link = cm[?"link"];
+                                c.owner = id;
+                            add_choice_to_bubble(id,c);
+                        }
                     break;
                 }
                 
@@ -872,6 +909,7 @@ if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
                                 c.link = noone;
                         }
                     break;
+                    
                     case obj_condition:
                         var ft = false;
                         var ff = false;
@@ -893,6 +931,7 @@ if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
                         if(!ff)
                             out_false.link = noone;
                     break;
+                    
                     case obj_action:
                         var found = false;
                         for(var iii=0;iii&lt;ds_list_size(copied);iii++)
@@ -906,6 +945,26 @@ if(!is_selected(obj_parent_bubble) &amp;&amp; !is_drag(obj_parent_bubble))
                         }
                         if(!found)
                             output.link = noone;
+                    break;
+                    
+                    case obj_choice_bubble:
+                        for(var ii=0;ii&lt;ds_list_size(choices);ii++)
+                        {
+                            var c = choices[|ii];
+                            found = false;
+                            show_debug_message(string(ii));
+                            for(var iii=0;iii&lt;ds_list_size(copied);iii++)
+                            {
+                                if(c.output.link == copied[|iii].TUID)
+                                {
+                                    c.output.link = copied[|iii];
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if(!found)
+                                c.output.link = noone;
+                        }
                     break;
                 }
             }

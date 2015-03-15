@@ -1,8 +1,10 @@
-///cs_arrange_bubbles(data,xpos,ypos);
-var lst,xpos,ypos;
-    lst = argument0;
-    xpos = argument1;
-    ypos = argument2;
+///cs_arrange_bubbles(data,xpos,ypos, width);
+var lst,xpos,ypos,width;
+    lst = argument[0];
+    xpos = argument[1];
+    ypos = argument[2];
+    width = 0;
+    if(argument_count > 3) width = argument[3];
     
 for(var i=0;i<ds_list_size(lst);i++)
 {
@@ -22,7 +24,21 @@ for(var i=0;i<ds_list_size(lst);i++)
             break;
             case "choice":
                 ypos += targetheight + 200;
+                
+                var data = mp[?"data"];
+                for(var ii=0;ii<ds_list_size(data);ii++)
+                {
+                    var mp2 = data[|ii];
+                    
+                }
             break;
         }
     }
 }
+
+var retdata;
+    retdata[0] = xpos;
+    retdata[1] = ypos;
+    retdata[2] = width;
+
+return retdata;

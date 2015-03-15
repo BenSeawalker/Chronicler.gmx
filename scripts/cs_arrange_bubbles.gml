@@ -11,6 +11,8 @@ for(var i=0;i<ds_list_size(lst);i++)
     var mp = lst[|i];
     with(mp[?"oid"])
     {
+        y = ypos;
+        x = xpos;
         switch(mp[?"type"])
         {
             case "action":

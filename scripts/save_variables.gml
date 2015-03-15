@@ -73,17 +73,19 @@ else if(!GUI_mode)
                     else
                         break;
                 }
-                v = string_copy(txt,ii+1,string_length(txt));
-                
-                var found = false;
-                with(obj_variable)if(name.text == n)// && ds_list_find_index(current_scene.tempvars,id)>-1)
+                if(ii+1 <= string_length(txt))
                 {
-                    found = true;
-                    value.text = v;
-                    add_variable(var_screen,id);
-                    break;
+                    v = string_copy(txt,ii+1,string_length(txt));
+                    
+                    var found = false;
+                    with(obj_variable)if(name.text == n)// && ds_list_find_index(current_scene.tempvars,id)>-1)
+                    {
+                        found = true;
+                        value.text = v;
+                        add_variable(var_screen,id);
+                        break;
+                    }
                 }
-                
                 if(!found)create_variable(var_screen,t,n,v,true);
             }
             else if(txt != "" && !string_pos("(",txt) && !string_pos("*",txt) && !string_pos("/",txt))

@@ -135,6 +135,8 @@
     <script>scripts\draw_connection_path.gml</script>
     <script>scripts\draw_connection_path_new.gml</script>
     <script>scripts\get_keys.gml</script>
+    <script>scripts\copy_bubble.gml</script>
+    <script>scripts\link_bubbles.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

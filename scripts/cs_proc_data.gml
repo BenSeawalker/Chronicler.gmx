@@ -6,21 +6,24 @@ var lst,xpos,ypos;
     
 var first_created = noone;
 var last_created = noone;
-    
-for(var i=0;i<ds_list_size(lst);i++)
+var gapx = 1000;
+var gapy = 300;
+
+var i = 0;
+for(i=0;i<ds_list_size(lst);i++)
 {
     var mp = lst[|i];
     if(mp[?"type"] == "action")
     {
         with(instance_create(xpos,ypos,obj_action))
         {
-            ds_map_add(mp,"oid",id);
+            link_bubbles(last_created,id);
             
             if(first_created == noone) first_created = id;
                     last_created = id;
                     
             tbox.text = mp[?"data"];
-            //ypos += height + 100;
+            ypos += height + 150;
         }
     }
     else if(mp[?"type"] == "if" || mp[?"type"] == "elseif" || mp[?"type"] == "else")
@@ -31,22 +34,29 @@ for(var i=0;i<ds_list_size(lst);i++)
             case "elseif":
                 with(instance_create(xpos,ypos,obj_condition))
                 {    
-                    ds_map_add(mp,"oid",id);
+                    
+                    
+                    if(mp[?"type"] == "elseif")
+                        last_created.out_false.link = id;
+                    else
+                        link_bubbles(last_created,id);
                     
                     if(first_created == noone) first_created = id;
                         last_created = id;
                     
                     tbox.text = string_replace_all(string_replace_all(mp[?"raw"],"*if",""),"*elseif","");
-                    var xyp = cs_proc_data(mp[?"data"],xpos+500,ypos+200);
+                    
+                    var xyp = cs_proc_data(mp[?"data"],xpos-gapx,ypos+200);
                     //xpos = xyp[0];
-                    //ypos = xyp[1];
+                    xpos += gapx;
+                    ypos = xyp[1];
                     out_true.link = xyp[2];
                     if(mp[?"type"] == "elseif")
                         last_created.out_false.link = xyp[2];
                 }
             break;
             case "else":
-                var xyp = cs_proc_data(mp[?"data"],xpos+500,ypos+200);
+                var xyp = cs_proc_data(mp[?"data"],xpos+gapx,ypos+200);
                     //xpos = xyp[0];
                     //ypos = xyp[1];
                 last_created.out_false.link = xyp[2];
@@ -61,7 +71,7 @@ for(var i=0;i<ds_list_size(lst);i++)
             var b = instance_create(xpos,ypos,obj_bubble);
             with(b)
             {
-                ds_map_add(mp,"oid",id);
+                link_bubbles(last_created,id);
                 
                 if(first_created == noone) first_created = id;
                     last_created = id;
@@ -71,7 +81,7 @@ for(var i=0;i<ds_list_size(lst);i++)
                 //targetheight = string_height(tbox.text)+32;
                 var s = 20;
                     textbox_draw(tbox,x+5,y+5,x+targetwidth-s-5,y+targetheight-10,false);
-                //ypos += targetheight + 100;
+                ypos += targetheight + 100;
             }
             if(i<ds_list_size(lst)-1)
             {
@@ -82,12 +92,17 @@ for(var i=0;i<ds_list_size(lst);i++)
                     {
                         with(instance_create(xpos,ypos,obj_choice_bubble))
                         {
-                            ds_map_add(mp,"oid",id);
+                            
                             b.output.link = id;
                             //last_created = id;
                             
                             var data = mp2[?"data"];
-                            for(var ii=0;ii<ds_list_size(data);ii++)
+                            var dsize = ds_list_size(data);
+                            
+                            ypos += dsize*100;
+                            var temp_ypos = ypos;
+                            
+                            for(var ii=0;ii<dsize;ii++)
                             {
                                 var mp3 = data[|ii];
                                     
@@ -99,12 +114,14 @@ for(var i=0;i<ds_list_size(lst);i++)
                                     ds_list_add(other.choices,id);
                                     //ypos += height;
                                     
-                                    var xyp = cs_proc_data(mp3[?"data"],xpos,ypos);//+ds_list_size(other.choices)*height);
+                                    var xyp = cs_proc_data(mp3[?"data"],xpos-gapx*(dsize/2)+gapx*ii,ypos);//+ds_list_size(other.choices)*height);
                                         //xpos = xyp[0];
-                                        //ypos = xyp[1];
+                                        temp_ypos = max(xyp[1],temp_ypos);
                                     output.link = xyp[2];
                                 }
                             }
+                            //xpos += gapx*dsize;
+                            ypos = temp_ypos + gapy;
                         }
                     }
                     //*/
@@ -121,27 +138,19 @@ for(var i=0;i<ds_list_size(lst);i++)
                             //last_created = id;
                             
                             var data = mp2[?"data"];
-                            for(var ii=0;ii<ds_list_size(data);ii++)
+                            var dsize = ds_list_size(data);
+                            
+                            ypos += dsize*120;
+                            
+                            for(var ii=0;ii<dsize;ii++)
                             {
                                 var mp4 = data[|ii];
                                     
                                 with(instance_create(xpos,ypos,obj_bchoice))
                                 {
-                                    ds_map_add(mp4,"oid",id);
-                                    tbox.text = string_replace(mp4[?"line"],"#","");
+                                    tbox.text = string_replace(mp4,"#","");
                                     owner = other.id;
                                     ds_list_add(other.choices,id);
-                                    //ypos += height;
-                                    
-                                    var nlst = ds_list_create();
-                                        ds_list_add(lst,mp4);
-                                    
-                                    var xyp = cs_proc_data(nlst,xpos,ypos);
-                                        //xpos = xyp[0];
-                                        //ypos = xyp[1];
-                                    output.link = xyp[2];
-                                    
-                                    ds_list_destroy(nlst);
                                 }
                             }
                         }
@@ -150,11 +159,55 @@ for(var i=0;i<ds_list_size(lst);i++)
             }
         }
     }
+    
+    else if(mp[?"type"] == "title" || mp[?"type"] == "author" || mp[?"type"] == "create" || mp[?"type"] == "temp")
+    {
+        gamevars += mp[?"data"] + chr(10);
+    }
 }
+
+var labels = ds_list_create();
+    with(obj_action)
+    {
+        if(string_pos("*label",tbox.text))
+        {
+            ds_list_add(labels,id);
+        }
+    }
+    
+with(obj_action)
+{
+    if(string_pos("*goto",tbox.text))
+    {
+        var plink = noone;
+            with(obj_action) if(output.link == other.id)
+            {
+                plink = id;
+                break;
+            }
+        if(plink != noone)
+        {
+            var lbl = string_trim(string_replace(tbox.text,"*goto",""),true);
+                for(var ii = 0;ii<ds_list_size(labels);ii++)
+                {
+                    with(labels[|ii])
+                    {
+                        if(string_pos(lbl,tbox.text) && y>other.y && abs(y-other.y)<=gapy*5)
+                        {
+                            plink.output.link = id;
+                            with(other) instance_destroy();
+                        }
+                    }
+                }
+            }
+    }
+}
+
 
 var sdata;
     sdata[0] = xpos;
     sdata[1] = ypos;
     sdata[2] = first_created;
+    sdata[3] = i;
     
 return sdata;

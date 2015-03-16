@@ -21,8 +21,7 @@ if(save_path != "")
         show_debug_message("Output file: "+save_path);
         
     ds_list_destroy(lst);
-    
     //show_popup("");
     show_popup("Save Complete!");
-    obj_ctrl.alarm[1] = room_speed;
+    obj_ctrl.alarm[1] = room_speed*10;
 }

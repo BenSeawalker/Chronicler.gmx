@@ -30,19 +30,16 @@ for(i=0;i<ds_list_size(lst);i++)
     {
         switch(mp[?"type"])
         {
+        
             case "if":
             case "elseif":
                 with(instance_create(xpos,ypos,obj_condition))
                 {    
-                    
-                    
                     if(mp[?"type"] == "elseif")
                         last_created.out_false.link = id;
                     else
                         link_bubbles(last_created,id);
                     
-                    if(first_created == noone) first_created = id;
-                        last_created = id;
                     
                     tbox.text = string_replace_all(string_replace_all(mp[?"raw"],"*if",""),"*elseif","");
                     
@@ -53,6 +50,9 @@ for(i=0;i<ds_list_size(lst);i++)
                     out_true.link = xyp[2];
                     if(mp[?"type"] == "elseif")
                         last_created.out_false.link = xyp[2];
+                        
+                    if(first_created == noone) first_created = id;
+                        last_created = id;
                 }
             break;
             case "else":
@@ -77,6 +77,7 @@ for(i=0;i<ds_list_size(lst);i++)
                     last_created = id;
                     
                 tbox.text = mp[?"data"];
+                //clipboard_set_text(string(mp[?"data"]));
                 //targetwidth = string_width(tbox.text)+32;
                 //targetheight = string_height(tbox.text)+32;
                 var s = 20;
@@ -109,7 +110,14 @@ for(i=0;i<ds_list_size(lst);i++)
                                 with(instance_create(xpos,ypos,obj_bchoice))
                                 {
                                     ds_map_add(mp3,"oid",id);
-                                    tbox.text = string_replace(mp3[?"line"],"#","");
+                                    var ltxt = mp3[?"line"];
+                                    var spos = string_pos("#",ltxt);
+                                    if(spos > 1)
+                                    {
+                                        cbox.text = string_copy(ltxt,1,spos-1);
+                                        ltxt = string_delete(ltxt,1,spos);
+                                    }
+                                    tbox.text = string_replace(ltxt,"#","");
                                     owner = other.id;
                                     ds_list_add(other.choices,id);
                                     //ypos += height;
@@ -148,7 +156,14 @@ for(i=0;i<ds_list_size(lst);i++)
                                     
                                 with(instance_create(xpos,ypos,obj_bchoice))
                                 {
-                                    tbox.text = string_replace(mp4,"#","");
+                                    var ltxt = mp4;
+                                    var spos = string_pos("#",ltxt);
+                                    if(spos > 1)
+                                    {
+                                        cbox.text = string_copy(ltxt,1,spos-1);
+                                        ltxt = string_delete(ltxt,1,spos);
+                                    }
+                                    tbox.text = string_replace(ltxt,"#","");
                                     owner = other.id;
                                     output.link = noone;
                                     ds_list_add(other.choices,id);
@@ -181,7 +196,7 @@ with(obj_action)
     if(string_pos("*goto",tbox.text))
     {
         var plink = noone;
-            with(obj_action) if(output.link == other.id)
+            with(obj_action) if(id != other.id && output.link == other.id)
             {
                 plink = id;
                 break;
@@ -203,7 +218,7 @@ with(obj_action)
             }
     }
 }
-
+ds_list_destroy(labels);
 
 var sdata;
     sdata[0] = xpos;

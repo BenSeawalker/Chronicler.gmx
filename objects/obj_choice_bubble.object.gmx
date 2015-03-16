@@ -261,7 +261,7 @@ for(var i=0;i&lt;ds_list_size(choices);i++)
                 }
             }
             //shift up
-            draw_sprite_ext(spr_arrow,1,x-12,y,1,1,0,colour-20,1);
+            draw_sprite_ext(spr_arrow,1,x-12,y,1,1,0,c_white,1);//colour-20,1);
                 if(in_rect(mouse_x,mouse_y,x-12,y,12,12))
                 {
                     draw_rectangle_colour(x-12,y,x,y+12,c_orange,c_orange,c_orange,c_orange,true);
@@ -274,7 +274,7 @@ for(var i=0;i&lt;ds_list_size(choices);i++)
                     }
                 }
             //shift down
-            draw_sprite_ext(spr_arrow,1,x-12,y+height,-1,1,180,colour-20,1);
+            draw_sprite_ext(spr_arrow,1,x-12,y+height,-1,1,180,c_white,1);//colour-20,1);
             if(in_rect(mouse_x,mouse_y,x-12,y+height,12,-12))
             {
                 draw_rectangle_colour(x-12,y+height-12,x,y+height,c_orange,c_orange,c_orange,c_orange,true);

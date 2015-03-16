@@ -1,5 +1,19 @@
-with(obj_parent_bubble) instance_destroy();
-with(obj_choice_parent) instance_destroy();
+instance_activate_all();
+
+var abl = ds_list_create();
+    ds_list_copy(abl,allbubbles);
+var i = 0;
+for(i=0;i<ds_list_size(abl);i++)
+{
+    with(abl[|i])instance_destroy();
+}
+    ds_list_copy(abl,allchoices);
+for(i=0;i<ds_list_size(abl);i++)
+{
+    with(abl[|i]) instance_destroy();
+}
+ds_list_destroy(abl);
+
 global.GUID = -1;
 var mode = GUI_mode;
 switch_GUI_mode(false);

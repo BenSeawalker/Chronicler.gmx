@@ -3,11 +3,12 @@ var scene, curscene;
 curscene = current_scene;
 scene = argument0;
 
-change_scene(scene);
-
+show_debug_message("dtc");
+change_scene(scene,false);
+show_debug_message("scene 1");
 var mode = GUI_mode;
 switch_GUI_mode(false);
-
+show_debug_message("gui 1");
 
 //setup vars
 var choiceScript,indent, bubbles, i;
@@ -48,6 +49,8 @@ for(var i=0;i<ds_list_size(scene.tempvars);i++)
         choiceScript += "*temp "+name.text+" "+value.text+chr(10);
 }
 choiceScript += chr(10);
+
+show_debug_message("startup");
 
 for(var i=0;i<ds_list_size(bubbles);i+=1)
 {
@@ -131,11 +134,13 @@ for(var i=0;i<ds_list_size(bubbles);i+=1)
         choiceScript += chr(10)+chr(10);
     }
 }
-
+show_debug_message("done");
 
 switch_GUI_mode(mode);
+show_debug_message("gui");
 
-change_scene(curscene);
+change_scene(curscene,false);
+show_debug_message("scene");
 
 return choiceScript;
     

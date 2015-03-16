@@ -1,4 +1,4 @@
-/// textbox_draw(id, x1, y1, x2, y2, GUI)
+/// textbox_draw(id, x1, y1, x2, y2, GUI, paste)
 
 /// Draws a box with editable text at the given position and with the given dimensions.
 /// The properties of the textbox are stored in the given obj_textbox instance id.
@@ -15,16 +15,16 @@
     var realmousepos,realstartpos,realendpos;
     var a,b,c,l,p,ww,hh,str;
     
-    i=argument0
-    xx=argument1
-    yy=argument2
-    w=argument3-argument1
-    h=argument4-argument2
+    i=argument[0]
+    xx=argument[1]
+    yy=argument[2]
+    w=argument[3]-argument[1]
+    h=argument[4]-argument[2]
     
     i.x = xx;
     i.y = yy;
     
-    if(argument5)
+    if(argument[5])
     {
         mx = window_mouse_get_x();
         my = window_mouse_get_y();
@@ -34,7 +34,8 @@
         mx = mouse_x;
         my = mouse_y;
     }
-    
+    paste_text = false;
+        if(argument_count > 6) paste_text = argument[6];
     //draw_set_font(i.font);
     
     // Colors
@@ -147,6 +148,7 @@
             if (!i.read_only && key_press[ord("V")]) action=2
             if (keyboard_check_pressed(ord("A"))) action=4
         }
+        if(paste_text) action = 2;
         switch (action) {
             case 0: case 1: { // Cut/Copy text
                 str=""
@@ -170,6 +172,7 @@
                 inserttext=clipboard_get_text()
                 inserttext=string_replace_all(inserttext,chr(13)+chr(10),chr(10))
                 inserttext=string_replace_all(inserttext,chr(13),chr(10))
+                show_debug_message("pasting: "+inserttext);
                 break
             }
             case 3: { // Delete text

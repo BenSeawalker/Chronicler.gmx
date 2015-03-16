@@ -5,7 +5,7 @@ c = argument1;
 l = argument2;
 col = argument3;
 
-if(c != noone && l != noone)
+if(c != noone && l != noone && c && l)
 {
     ///*
     offset = 24+i;

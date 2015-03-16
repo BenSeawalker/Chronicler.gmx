@@ -19,6 +19,8 @@ if(path != "")
     
     cs_proc_scenes(csdata,path);
     
+    cs_cleanup(csdata);
+    
     save_variables();
     switch_GUI_mode(true);
 }

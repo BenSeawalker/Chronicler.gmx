@@ -25,8 +25,11 @@ if(ds_exists(data,ds_type_list))
                 change_scene(scene);
             
             show_debug_message(path+data[|i]+".txt");
-            cs_proc_data(cs_to_data(path+data[|i]+".txt",true),0,0);
+            var csdata = cs_to_data(path+data[|i]+".txt",true);
+            cs_proc_data(csdata,0,0);
             show_debug_message("done...");
+            
+            cs_cleanup(csdata);
         }
     }
 }

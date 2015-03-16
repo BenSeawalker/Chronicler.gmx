@@ -16,6 +16,7 @@ var nmp = ds_map_create();
         {
             case "blank":
                 ds_map_destroy(nmp);
+                ds_map_destroy(mp);
                 return -1;
             break;
             
@@ -39,6 +40,8 @@ var nmp = ds_map_create();
                 ds_map_replace(nmp,"type","bubble");
                 ds_map_replace(nmp,"data",txt);
                 ds_map_replace(nmp,"index",nind);
+                
+                ds_map_destroy(mp);
             break;
             
             
@@ -63,6 +66,8 @@ var nmp = ds_map_create();
                 ds_map_replace(nmp,"type","scene_list");
                 ds_map_replace(nmp,"data",lst);
                 ds_map_replace(nmp,"index",nind);
+                
+                ds_map_destroy(mp);
             break;
             
             case "if":
@@ -76,6 +81,8 @@ var nmp = ds_map_create();
                 ds_map_replace(nmp,"type",mp[?"type"]);
                 ds_map_replace(nmp,"data",block);
                 ds_map_add(nmp,"raw",mp[?"line"]);
+                
+                ds_map_destroy(mp);
             break;
             
             
@@ -94,6 +101,8 @@ var nmp = ds_map_create();
                             ds_list_delete(block,nind);
                     ds_map_replace(mp2,"data",block);
                 }
+                
+                ds_map_destroy(mp);
             break;
             
             case "fake_choice":
@@ -106,6 +115,8 @@ var nmp = ds_map_create();
                 }
                 ds_map_replace(nmp,"data",data);
                 ds_map_replace(nmp,"index",index+ds_list_size(data)+1);
+                
+                ds_map_destroy(mp);
             break;
             
             
@@ -113,6 +124,8 @@ var nmp = ds_map_create();
             default:
                 ds_map_replace(nmp,"type",mp[?"type"]);
                 ds_map_replace(nmp,"data",mp[?"line"]);
+                
+                ds_map_destroy(mp);
             break;
         }
     

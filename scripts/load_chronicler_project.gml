@@ -144,14 +144,14 @@ if(lp != "" || dat)
                 with(instance_create(mp[? "x"],mp[? "y"],obj_bubble))
                 {
                     UID = mp[? "UID"];
-                    width = mp[? "width"];
-                    height = mp[? "height"];
+                    width = max(mp[? "width"],targetwidth);
+                    height = max(mp[? "height"],targetheight);
                         targetwidth = width;
                         targetheight = height;
                     shift_y = real(mp[?"shift_y"]);
                     if(save_version>=130)colour = mp[? "col"];
                     
-                    tbox.text = mp[? "tbox"];
+                    tbox.text = string(mp[? "tbox"]);
                     title.text = mp[? "title"];
                     label = get_label(title.text,UID);
                     
@@ -308,6 +308,7 @@ if(lp != "" || dat)
             
             if(use_choice_bubbles)
             {
+                change_scene(scene,false);
                 var cb = get_obj_from_UID(owner);
                 output.link = get_obj_from_UID(output.link);
             
@@ -316,7 +317,7 @@ if(lp != "" || dat)
                     //old data
                     if(cb.output.link == noone || cb.output.link.object_index != obj_choice_bubble || cb.output.link == noone)
                     {
-                        change_scene(scene,false);
+                        
                         var ncb = instance_create(cb.x,cb.y+cb.targetheight+60,obj_choice_bubble);
                         cb.output.link = ncb;
                         ncb.owner = cb;

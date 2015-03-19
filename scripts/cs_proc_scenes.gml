@@ -24,10 +24,9 @@ if(ds_exists(data,ds_type_list))
                 add_scene_to_group(scene_list,scene);
                 change_scene(scene);
             
-            show_debug_message(path+data[|i]+".txt");
+            //show_debug_message(path+data[|i]+".txt");
             var csdata = cs_to_data(path+data[|i]+".txt",true);
-            cs_proc_data(csdata,0,0);
-            show_debug_message("done...");
+            cs_proc_data(csdata,0,0,true);
             
             cs_cleanup(csdata);
         }

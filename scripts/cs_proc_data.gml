@@ -1,13 +1,28 @@
-///cs_proc_data(data,xpos,ypos);
-var lst,xpos,ypos;
-    lst = argument0;
-    xpos = argument1;
-    ypos = argument2;
+///cs_proc_data(data,xpos,ypos,create_intro_bubble);
+var lst,xpos,ypos,create_intro_bubble;
+    lst = argument[0];
+    xpos = argument[1];
+    ypos = argument[2];
+    create_intro_bubble = false;
+        if(argument_count > 3) create_intro_bubble = argument[3];
     
 var first_created = noone;
 var last_created = noone;
 var gapx = 1000;
 var gapy = 300;
+
+if(create_intro_bubble)
+{
+    with(instance_create(xpos,ypos,obj_bubble))
+    {
+        first_created = id;
+        last_created = id;
+        title.text = "Intro";
+        start = true;
+        
+        ypos += targetheight + gapy;
+    }
+}
 
 var i = 0;
 for(i=0;i<ds_list_size(lst);i++)
@@ -178,7 +193,47 @@ for(i=0;i<ds_list_size(lst);i++)
     
     else if(mp[?"type"] == "title" || mp[?"type"] == "author" || mp[?"type"] == "create" || mp[?"type"] == "temp")
     {
-        gamevars += mp[?"data"] + chr(10);
+        if(!string_pos(mp[?"data"],gamevars))
+        {
+            var txt = string_replace(mp[?"data"],"*temp","*create");
+            
+            gamevars += txt + chr(10);
+        }
+        /*
+        switch(mp[?"type"])
+        {
+            case "title":
+                project_name = string_trim(string_replace(mp[?"data"],"*title ",""),false);
+                var_screen.vars[|0].name.text = project_name;
+                //show_debug_message("pname: "+project_name);
+                //var vtitle = create_variable(var_screen,vartype_title,project_name,"",false);
+            break;
+            case "author":
+                //create_variable(var_screen,vartype_author,string_trim(string_replace(mp[?"data"],"*author ",""),false),"",false);
+                var_screen.vars[|1].name.text = string_trim(string_replace(mp[?"data"],"*author ",""),false);
+            break;
+            case "create":
+                var txt = string_explode(" ",string_trim(string_replace(mp[?"data"],"*create ",""),false));
+                var n,v;
+                    n = string(txt[|0]);
+                    v = "";
+                    for(var ii = 1;ii<ds_list_size(txt);ii++)
+                        v += string(txt[|ii])+" ";
+                    create_variable(var_screen,vartype_global,n,v,true);
+                ds_list_destroy(txt);
+            break;
+            case "temp":
+                var txt = string_explode(" ",string_trim(string_replace(mp[?"data"],"*temp ",""),false));
+                var n,v;
+                    n = string(txt[|0]);
+                    v = "";
+                    for(var ii = 1;ii<ds_list_size(txt);ii++)
+                        v += string(txt[|ii])+" ";
+                    create_variable(var_screen,vartype_temp,n,v,true);
+                ds_list_destroy(txt);
+            break;
+        }
+        //*/
     }
 }
 

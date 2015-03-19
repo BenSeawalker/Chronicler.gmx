@@ -1,19 +1,19 @@
 ///change_scene(scene, save);
 
-show_debug_message("changing");
+//show_debug_message("changing");
 
 instance_deactivate_object(obj_parent_bubble);
 instance_deactivate_object(obj_choice_parent);
 var cscene = argument[0];
 var save = true;
 if(argument_count>1) save = argument[1];
-show_debug_message("save: "+string(save));
+//show_debug_message("save: "+string(save));
 if(save)
 {
     if(!GUI_mode)save_variables();
     else {switch_GUI_mode(false); switch_GUI_mode(true)}
 }
-show_debug_message("switched");
+//show_debug_message("switched");
 //if(!instance_exists(obj_message_callback) && !var_screen.visible)
     with(current_scene)
     {
@@ -41,7 +41,7 @@ if(save)
     if(GUI_mode)save_variables();
     else {switch_GUI_mode(true); switch_GUI_mode(false)}
 }
-show_debug_message("switched 2");
+//show_debug_message("switched 2");
 //view_xview[0] = 0;
 //view_yview[0] = 0;
 group_select = false;
@@ -77,5 +77,5 @@ for(i=0;i<ds_list_size(current_scene.bubbles);i++)
         }
     }
 }
-show_debug_message(string(i));
-show_debug_message("done changing");
+//show_debug_message(string(i));
+//show_debug_message("done changing");

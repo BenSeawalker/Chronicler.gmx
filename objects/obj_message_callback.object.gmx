@@ -36,6 +36,10 @@ height = 0;
 owner = noone;
 action = -1;
 
+view_x = view_xview[0];
+view_y = view_yview[0];
+view_s = view_scale;
+
 
 instance_deactivate_all(true);
 instance_activate_object(obj_ctrl);
@@ -87,7 +91,10 @@ with(comp) instance_destroy();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>change_scene(current_scene);
+            <string>view_xview[0] = view_x;
+view_yview[0] = view_y;
+view_scale = view_s;
+change_scene(current_scene);
 instance_destroy();
 </string>
           </argument>
@@ -111,7 +118,10 @@ instance_destroy();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>change_scene(current_scene);
+            <string>view_xview[0] = view_x;
+view_yview[0] = view_y;
+view_scale = view_s;
+change_scene(current_scene);
 with(owner) event_user(other.action);
 instance_destroy();
 </string>

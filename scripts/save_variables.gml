@@ -1,15 +1,5 @@
 if(GUI_mode)
 {
-    var nameless = false;
-    with(obj_variable) if(name.text == "" && (type == vartype_global || type == vartype_temp)) {nameless = true; break;}
-    
-    if(nameless && !show_question("Some Variables don't have names.#They will be removed...##Continue?"))exit; 
-    
-    with(obj_variable)if(name.text == "" && (type == vartype_global || type == vartype_temp))
-    {
-        instance_destroy();
-    }
-    
     gamevars = "";
     with(var_screen.vars[| 0]) {gamevars += "*title "+name.text+chr(10); project_name = name.text;}
     with(var_screen.vars[| 1]) gamevars += "*author "+name.text+chr(10)+chr(10);
@@ -33,76 +23,75 @@ if(GUI_mode)
 }
 else if(!GUI_mode)
 {
-    with(obj_variable)if(type != vartype_temp)instance_destroy();
+    with(obj_variable) if(type != vartype_temp) instance_destroy();
     ds_list_clear(var_screen.vars);
         create_variable(var_screen,vartype_title,project_name,"",false);
         create_variable(var_screen,vartype_author,"","",false);
-        
-    var txt = "";
-    var c = "";
-    var line = 0;
-    for(var i=1;i<=string_length(gamevars);i++)
+    
+    var lines = string_explode(chr(10),gamevars);
+    for(var i=0;i<ds_list_size(lines);i++)
     {
-        c = string_char_at(gamevars,i);
-        if(c != chr(10))
-            txt += c;
-        if(c == chr(10) || i==string_length(gamevars))
+        var line = string_explode(" ",lines[|i]);
+        var ls = ds_list_size(line);
+        if(ls >= 2)
         {
-            line++;
-            if(string_pos("*title",txt))
+            switch(line[|0])
             {
-                var_screen.vars[| 0].name.text = string_trim(string_replace(txt,"*title ",""));
-                project_name = var_screen.vars[| 0].name.text;
-            }
-            else if(string_pos("*author",txt))
-                var_screen.vars[| 1].name.text = string_trim(string_replace(txt,"*author ",""));
-            else if(string_pos("*create",txt) || string_pos("*temp",txt))
-            {
-                var t = vartype_global;
-                    if(string_pos("*temp",txt)) t = vartype_temp;    
-            
-                txt = string_trim(string_replace(string_replace(txt,"*create ",""),"*temp ",""));
-                var n = "";
-                var v = "";
-                   
-                for(var ii=1;ii<=string_length(txt);ii++)
-                {
-                    c = string_char_at(txt,ii);
-                    if(c!=" " && c!=chr(10)) 
-                        n+=c;
-                    else
-                        break;
-                }
-                if(ii+1 <= string_length(txt))
-                {
-                    v = string_copy(txt,ii+1,string_length(txt));
+                case "*title":
+                    line[|0] = "";
+                        project_name = string_trim(string_implode(" ",line),false);
+                    var_screen.vars[|0].name.text = project_name;
+                break;
+                case "*author":
+                    line[|0] = "";
+                    var_screen.vars[|1].name.text = string_trim(string_implode(" ",line),false);
+                break;
+                case "*create":
+                    var n,v;
+                    var n = line[|1];
+                    line[|0] = "";
+                    line[|1] = "";
+                    v = string_trim(string_implode(" ",line),false);
+                    //if(ls >= 3) v = string_trim(string_implode(" ",line),false); else v = ""
+                    
+                    create_variable(var_screen,vartype_global,n,v,true);
+                break;
+                case "*temp":
+                    var n,v;
+                    var n = line[|1];
+                    line[|0] = "";
+                    line[|1] = "";
+                    v = string_trim(string_implode(" ",line),false);
+                    //if(ls >= 3) v = line[|2] else v = ""
                     
                     var found = false;
-                    with(obj_variable)if(name.text == n)// && ds_list_find_index(current_scene.tempvars,id)>-1)
+                    with(obj_scene)
                     {
-                        found = true;
-                        value.text = v;
-                        add_variable(var_screen,id);
-                        break;
+                        for(var j=0;j<ds_list_size(tempvars);j++)
+                        {
+                            var tv = tempvars[|j];
+                            if(tv.name.text == n)
+                            {
+                                tv.value.text = v;
+                                add_variable(var_screen,tv);
+                                
+                                found = true;
+                                break;
+                            }
+                        }
                     }
-                }
-                if(!found)create_variable(var_screen,t,n,v,true);
+                    if(!found)
+                        create_variable(var_screen,vartype_temp,n,v,true);
+                break;
             }
-            else if(txt != "" && !string_pos("(",txt) && !string_pos("*",txt) && !string_pos("/",txt))
-            {
-                if(!show_question("Error line:"+string(line)+'#"'+txt+'"##Continue anyway?'))
-                {
-                    show_variables();
-                    exit;
-                }
-            }
-            
-            txt = "";
         }
+        if(ds_exists(line,ds_type_list)) ds_list_destroy(line);
     }
-    
-    with(obj_variable) if(type == vartype_temp && !ds_list_find_index(var_screen.vars,id))
+    ds_list_destroy(lines);
+    //cleanup extras
+    with(obj_variable)
     {
-        add_variable(var_screen,id);
+        if(type == vartype_temp && ds_list_find_index(var_screen.vars,id)==-1)
+            instance_destroy();
     }
 }

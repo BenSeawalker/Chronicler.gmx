@@ -216,6 +216,7 @@ if(lp != "" || dat)
                 {
                     with(instance_create(mp[? "x"],mp[? "y"],obj_bchoice))
                     {
+                        scene = current_scene;
                         index = mp[? "index"];
                         width = mp[? "width"];
                         
@@ -315,6 +316,7 @@ if(lp != "" || dat)
                     //old data
                     if(cb.output.link == noone || cb.output.link.object_index != obj_choice_bubble || cb.output.link == noone)
                     {
+                        change_scene(scene,false);
                         var ncb = instance_create(cb.x,cb.y+cb.targetheight+60,obj_choice_bubble);
                         cb.output.link = ncb;
                         ncb.owner = cb;

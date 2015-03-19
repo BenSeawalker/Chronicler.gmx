@@ -109,6 +109,7 @@
       <script>scripts\save_choicescript.gml</script>
       <script>scripts\switch_GUI_mode.gml</script>
       <script>scripts\save_variables.gml</script>
+      <script>scripts\save_variables_old.gml</script>
       <script>scripts\add_undo.gml</script>
       <scripts name="ChoiceScript">
         <scripts name="Raw">

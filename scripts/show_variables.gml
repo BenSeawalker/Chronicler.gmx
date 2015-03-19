@@ -1,5 +1,8 @@
 if(GUI_mode)
 {
+    var_screen.view_x = view_xview[0];
+    var_screen.view_y = view_yview[0];
+    var_screen.view_s = view_scale;
     set_view_scale(1);
     instance_deactivate_all(false);
     instance_activate_object(obj_ctrl);
@@ -11,6 +14,8 @@ if(GUI_mode)
     var_screen.x = view_xview[0]+view_wview[0]/2-obj_variable.width/2;
     var_screen.y = view_yview[0]+100;
     var_screen.visible = true;
+    
+    
 }
 else
 {

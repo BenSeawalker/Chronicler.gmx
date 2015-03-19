@@ -145,7 +145,7 @@ if(open)
                     scene_count++;
                     var s = create_scene(x+rad,y,"scene_"+string(scene_count),true);
                     add_scene_to_group(id,s);
-                    change_scene(s,false);
+                    change_scene(s);
                     
                     with(instance_create(vw/2,room_height/4,obj_bubble))
                     {
@@ -190,11 +190,11 @@ if(open)
                 scroll_time = 0;
                 if(u)
                 {
-                    change_scene(scenes[|--ind],false);
+                    change_scene(scenes[|--ind]);
                 }
                 if(d)
                 {
-                    change_scene(scenes[|++ind],false);
+                    change_scene(scenes[|++ind]);
                 }
             }
         }
@@ -253,7 +253,7 @@ if(open)
                     {
                         if(sv[i].clicks++ &lt; 1)
                         {
-                            change_scene(sv[i],false);
+                            change_scene(sv[i]);
                         }
                         else if(sv[i].editable)
                         {

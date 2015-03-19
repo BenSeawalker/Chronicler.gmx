@@ -74,15 +74,16 @@ new = true;
             <string>with(name) instance_destroy();
 with(value) instance_destroy();
 
-if(type == vartype_temp)
-{
+//if(type == vartype_temp)
+//{
     with(obj_scene)
     {
         var ind = ds_list_find_index(tempvars,other.id);
         if(ind&gt;-1)ds_list_delete(tempvars,ind);
     }
-}
-ds_list_delete(var_screen.vars,ds_list_find_index(var_screen.vars,id));
+//}
+var ind = ds_list_find_index(var_screen.vars,id);
+if(ind &gt; -1) ds_list_delete(var_screen.vars,ind);
 </string>
           </argument>
         </arguments>

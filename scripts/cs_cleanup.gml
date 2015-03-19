@@ -7,19 +7,18 @@ for(var i=0;i<ds_list_size(lst);i++)
     
     switch(mp[?"type"])
     {
-        case "choice":
         case "scene_list":
+            ds_list_destroy(mp[?"data"]);
+        break;
+        
+        case "choice":
         case "if":
         case "elseif":
         case "else":
-            ds_list_destroy(mp[?"data"]);
-            ds_map_destroy(mp);
-        break;
-        
-        default:
-            ds_map_destroy(mp);
+            cs_cleanup(mp[?"data"]);
         break;
     }
+    ds_map_destroy(mp);
 }
 
 ds_list_destroy(lst);

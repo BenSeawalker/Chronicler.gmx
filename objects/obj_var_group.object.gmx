@@ -28,6 +28,10 @@
             <string>vars = ds_list_create();
 
 hover = false;
+
+view_x = view_xview[0];
+view_y = view_yview[0];
+view_s = view_scale;
 </string>
           </argument>
         </arguments>
@@ -57,7 +61,8 @@ with(obj_variable) visible = false;
 if(visible)
     for(var i=0;i&lt;ds_list_size(vars);i++)
     {
-        vars[| i].visible = visible;
+        if(instance_exists(vars[|i]))
+            vars[| i].visible = visible;
     }
 else
     exit;
@@ -177,6 +182,10 @@ if(mouse_check_button_pressed(mb_left))
         instance_activate_object(obj_file_component);*/
         
         save_variables();
+        
+        view_xview[0] = view_x;
+        view_yview[0] = view_y;
+        view_scale = view_s;
         change_scene(current_scene);
     }
     /*else if(in_rect(window_mouse_get_x(),window_mouse_get_y(),x2,y2,x2+w,y2+w))

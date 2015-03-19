@@ -1,7 +1,6 @@
 ///data_to_list();
 var datalist = ds_list_create();
 
-show_debug_message("dtl");
 
 //save project variables
 var pv = ds_map_create();
@@ -41,18 +40,14 @@ var pv = ds_map_create();
     ds_list_add(datalist,ds_map_write(pv));
 ds_map_destroy(pv);
 
-show_debug_message("scenes");
 
 //save objects
-show_debug_message("bubbles start");
 var curscene = current_scene;
 for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
 {
     with(scene_list.scenes[| ii])
     {
-        show_debug_message(title.text);
         change_scene(id,false);
-        show_debug_message("done");
         var i = 0;
         for(i=0;i<ds_list_size(bubbles);i++)
         {
@@ -160,11 +155,8 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                 ds_map_destroy(mp);
             }
         }
-        show_debug_message(string(i));
     }
 }
-show_debug_message("bubbles end");
 change_scene(curscene,false);
-show_debug_message("change scene");
 
 return datalist;

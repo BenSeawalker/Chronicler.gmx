@@ -149,24 +149,33 @@ view_yview[0] += mouse_wheel_down()*50;
           <argument>
             <kind>1</kind>
             <string>var w = sprite_get_width(spr_icons);
+var h = sprite_get_height(spr_icons);
 
 var x1,y1,x2,y2;
 x1 = view_wport[0]-w*2-10;
 y1 = 10;
 x2 = view_wport[0]-w-5;
 y2 = 10;
-//draw_roundrect_colour(x1,y1,x2,y2,c_red,c_red,false);
-//draw_text_centered(x1+(x2-x1)/2,y1+(y2-y1)/2,"X",c_white);
-
-
-
-//draw_sprite(spr_icons,68,room_width-w*2-10,0);
-//draw_sprite(spr_icons,69,room_width-w-5,0);
-var h1 = in_rect(window_mouse_get_x(),window_mouse_get_y(),x2,y2,x2+w,y2+w);
+//draw "Confirm" checkbox
+var h1 = in_rect(window_mouse_get_x(),window_mouse_get_y(),x2,y2,x2+w,y2+h);
 var col = c_black;
     if(h1) col = c_orange;
 draw_sprite(spr_icons,68,room_width-w-5,y2);
 draw_rectangle_colour(x2,y2,x2+w,y2+w,col,col,col,col,true);
+
+//draw current_scene
+w = string_width(current_scene.title.text) + 10;
+h = string_height(current_scene.title.text) + 10;
+x1 = view_wport[0] - w - 10;
+y1 = view_hport[0] - h - 10;
+x2 = x1 + w;
+y2 = y1 + h;
+draw_set_alpha(0.6);
+    draw_rectangle_colour(x1,y1,x2,y2,c_menu,c_menu,c_menu,c_menu,false);
+draw_set_alpha(1);
+draw_text_centered(x1+w/2,y1+h/2,current_scene.title.text,c_text);
+
+
 
 if(mouse_check_button_pressed(mb_left))
 {
@@ -174,12 +183,6 @@ if(mouse_check_button_pressed(mb_left))
     {
         visible = false;
         instance_activate_all();
-        /*instance_activate_object(obj_bubble_menu);
-        instance_activate_object(obj_bm_group);
-        instance_activate_object(obj_scene);
-        instance_activate_object(obj_scene_group);
-        instance_activate_object(obj_completion);
-        instance_activate_object(obj_file_component);*/
         
         save_variables();
         
@@ -188,12 +191,6 @@ if(mouse_check_button_pressed(mb_left))
         view_scale = view_s;
         change_scene(current_scene);
     }
-    /*else if(in_rect(window_mouse_get_x(),window_mouse_get_y(),x2,y2,x2+w,y2+w))
-    {
-        visible = false;
-        instance_activate_all();
-        change_scene(current_scene,false);
-    }*/
 }
 </string>
           </argument>

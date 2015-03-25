@@ -65,12 +65,40 @@ if(lp != "" || dat)
     
     project_name = pv[? "project_name"];
     GUID = pv[? "GUID"];
-    gamevars = string(pv[? "gamevars"]);
+    if(save_version < 141) gamevars = string(pv[? "gamevars"]);
     gamestats = string(pv[? "gamestats"]);
     if(save_version>=130)stats_path = string(pv[? "stats_path"]);
     scene_list.scene_count = pv[? "scene_count"];
     var load_scene = string(pv[? "cur_scene"]);
+    
     save_variables();
+    
+    //variables
+    /*
+    if(save_version >= 141)
+    {
+        var vl = ds_list_create();
+        ds_list_read(vl,pv[? "variables"]);
+        
+        for(var i=0;i<ds_list_size(vl);i++)
+        {
+            var vm = ds_map_create();
+            ds_map_read(vm,vl[|i]);
+            
+            with(create_variable(var_screen,vm[?"type"],vm[?"name"],vm[?"value"],vm[?"editable"]))
+            {
+                scene = vm[?"scene"];
+            }
+            
+            ds_map_destroy(vm);
+        }
+        
+        ds_list_destroy(vl);
+    }
+    switch_GUI_mode(true);
+    switch_GUI_mode(false);
+    */
+    
     
     //scenes
     var sl = ds_list_create();
@@ -80,17 +108,29 @@ if(lp != "" || dat)
     {
         with(get_scene("startup"))
         {
+            
             var sm = ds_map_create();
                 ds_map_read(sm,sl[|0]);
-            var tvars = ds_list_create();
-                ds_list_read(tvars,sm[? "tvars"]);
-            for(var i=0;i<ds_list_size(tvars);i++)
+                
+            //if(save_version < 141)
+            //{
+                var tvars = ds_list_create();
+                    ds_list_read(tvars,sm[? "tvars"]);
+                for(var i=0;i<ds_list_size(tvars);i++)
+                {
+                    with(obj_variable) if(name.text == tvars[|i]) ds_list_add(other.tempvars,id);//scene = other.id;
+                }
+            //}
+            /*
+            else
             {
-                with(obj_variable) if(name.text == tvars[|i]) ds_list_add(other.tempvars,id);
+                with(obj_variable) if(scene == "startup") scene = other.id;
             }
+            */
             path = sm[? "path"];
             
             ds_map_destroy(sm);
+            
         }
         
         for(var i=1;i<ds_list_size(sl);i++)
@@ -101,15 +141,24 @@ if(lp != "" || dat)
                 if(save_version>=130)s.path = sm[? "path"];
             add_scene_to_group(scene_list,s);
             
-            var tvars = ds_list_create();
-                ds_list_read(tvars,sm[? "tvars"]);
-            with(s)
-            {
-                for(var ii=0;ii<ds_list_size(tvars);ii++)
+            //if(save_version < 141)
+            //{
+                var tvars = ds_list_create();
+                    ds_list_read(tvars,sm[? "tvars"]);
+                with(s)
                 {
-                    with(obj_variable) if(name.text == tvars[|ii]) ds_list_add(other.tempvars,id);
+                    for(var ii=0;ii<ds_list_size(tvars);ii++)
+                    {
+                        with(obj_variable) if(name.text == tvars[|ii]) ds_list_add(other.tempvars,id);//scene = other.id;
+                    }
                 }
+            //}
+            /*
+            else
+            {
+                with(obj_variable) if(scene == other.title.text) scene = other.id;
             }
+            */
             ds_map_destroy(sm);
         }
     }
@@ -128,6 +177,9 @@ if(lp != "" || dat)
         }
     ds_list_destroy(sl);
     ds_map_destroy(pv);
+    
+    //switch_GUI_mode(true);
+    //switch_GUI_mode(false);
     
     //create the objects
     for(var i=1;i<ds_list_size(lst);i++)

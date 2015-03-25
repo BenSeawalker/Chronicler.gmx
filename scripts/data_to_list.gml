@@ -1,7 +1,7 @@
 ///data_to_list();
 var datalist = ds_list_create();
 
-show_debug_message("dtl");
+//show_debug_message("dtl");
 
 //save project variables
 var pv = ds_map_create();
@@ -15,19 +15,38 @@ var pv = ds_map_create();
     ds_map_add(pv,"save_state",real(use_choice_bubbles));
     stats_path = string(stats_path);
     ds_map_add(pv,"stats_path",string(stats_path));
+    
+    //variables
+    /*
+    var vl = ds_list_create();
+    with(obj_variable)
+    {
+        var vm = ds_map_create();
+        ds_map_add(vm,"type",string(type));
+        ds_map_add(vm,"scene",string(scene.text));
+        ds_map_add(vm,"name",string(name.text));
+        ds_map_add(vm,"value",string(value.text));
+        ds_map_add(vm,"editable",real(editable));
+        
+        ds_list_add(vl,ds_map_write(vm));
+        ds_map_destroy(vm);
+    }
+    ds_map_add(pv,"variables",ds_list_write(vl));
+    */
+    
     //scenes
     var sl = ds_list_create();
-    
     for(var i=0;i<ds_list_size(scene_list.scenes);i++)
     {
         var sm = ds_map_create();
-        var tvars = ds_list_create();
+        //var tvars = ds_list_create();
+        /*
             for(var ii=0;ii<ds_list_size(scene_list.scenes[|i].tempvars);ii++)
             {
                 ds_list_add(tvars,string(scene_list.scenes[|i].tempvars[|ii].name.text));
             }
         ds_map_add(sm,"tvars",ds_list_write(tvars));
-        
+        */
         ds_map_add(sm,"title",string(scene_list.scenes[| i].title.text));
         ds_map_add(sm,"path",string(scene_list.scenes[| i].path));
         
@@ -41,18 +60,18 @@ var pv = ds_map_create();
     ds_list_add(datalist,ds_map_write(pv));
 ds_map_destroy(pv);
 
-show_debug_message("scenes");
+//show_debug_message("scenes");
 
 //save objects
-show_debug_message("bubbles start");
+//show_debug_message("bubbles start");
 var curscene = current_scene;
 for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
 {
     with(scene_list.scenes[| ii])
     {
-        show_debug_message(title.text);
+        //show_debug_message(title.text);
         change_scene(id,false);
-        show_debug_message("done");
+        //show_debug_message("done");
         var i = 0;
         for(i=0;i<ds_list_size(bubbles);i++)
         {
@@ -160,11 +179,11 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                 ds_map_destroy(mp);
             }
         }
-        show_debug_message(string(i));
+        //show_debug_message(string(i));
     }
 }
-show_debug_message("bubbles end");
+//show_debug_message("bubbles end");
 change_scene(curscene,false);
-show_debug_message("change scene");
+//show_debug_message("change scene");
 
 return datalist;

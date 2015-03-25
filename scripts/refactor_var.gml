@@ -1,45 +1,10 @@
-///refactor_var(name,newname);
-var oldname,newname;
+///refactor_var(name,newname,scene);
+var oldname,newname,temp_scene;
     oldname = argument0;
     newname = argument1;
-
-
-//even inactive bubbles
-/*
-var curscene = current_scene;
-for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
-{
-    with(scene_list.scenes[| ii])
-    {
-        change_scene(id,false);
-        for(var i=0;i<ds_list_size(bubbles);i++)
-        {
-            with(bubbles[| i])
-            {
-                if(object_index == obj_bubble)
-                {
-                    tbox.text = string_replace_all(tbox.text,"${"+oldname+"}","${"+newname+"}");
-                    
-                    var s = 20;
-                    textbox_draw(tbox,x+5,y+5,x+width-s-5,y+height-10,false);
-                }
-                else
-                {
-                    tbox.text = string_replace_all(tbox.text,oldname,newname);
-                }
-                new = true;
-            }
-        }
-    }
-}
-change_scene(curscene,false);
-instance_deactivate_all(false);
-instance_activate_object(obj_ctrl);
-instance_activate_object(var_screen);
-instance_activate_object(obj_variable);
-instance_activate_object(obj_scene);
-instance_activate_object(obj_file_menu);
-*/
+    scene = argument2;
+    
+    show_debug_message(scene.title.text);
 
 for(var i=0;i<ds_list_size(allbubbles);i++)
 {
@@ -47,18 +12,37 @@ for(var i=0;i<ds_list_size(allbubbles);i++)
     instance_activate_object(bubble);
     if(instance_exists(bubble))
     {
-        if(bubble.object_index == obj_bubble)
+        if(scene == "all" || scene == bubble.scene)
         {
-            bubble.tbox.text = string_replace_all(bubble.tbox.text,"${"+oldname+"}","${"+newname+"}");
-            bubble.tbox.text = string_replace_all(bubble.tbox.text,"$!{"+oldname+"}","$!{"+newname+"}");
-            var s = 20;
-            textbox_draw(bubble.tbox,x+5,y+5,x+width-s-5,y+height-10,false);
+            if(scene == bubble.scene)
+                show_debug_message("refactoring: " + bubble.scene.title.text);
+                
+            if(bubble.object_index == obj_bubble)
+            {
+                bubble.tbox.text = string_replace_all(bubble.tbox.text,"${"+oldname+"}","${"+newname+"}");
+                bubble.tbox.text = string_replace_all(bubble.tbox.text,"$!{"+oldname+"}","$!{"+newname+"}");
+                var s = 20;
+                textbox_draw(bubble.tbox,x+5,y+5,x+width-s-5,y+height-10,false);
+            }
+            else if(bubble.object_index == obj_choice_bubble)
+            {
+                for(var j=0;j<ds_list_size(bubble.choices);j++)
+                {
+                    with(bubble.choices[|j])
+                    {
+                        tbox.text = string_replace_all(tbox.text,"${"+oldname+"}","${"+newname+"}");
+                        tbox.text = string_replace_all(tbox.text,"$!{"+oldname+"}","$!{"+newname+"}");
+                        cbox.text = string_replace_all(cbox.text,oldname,newname);
+                        new = true;
+                    }
+                }
+            }
+            else
+            {
+                bubble.tbox.text = string_replace_all(bubble.tbox.text,oldname,newname);
+                bubble.new = true;
+            }
         }
-        else
-        {
-            bubble.tbox.text = string_replace_all(bubble.tbox.text,oldname,newname);
-        }
-        bubble.new = true;
     }
     instance_deactivate_object(bubble);
 }

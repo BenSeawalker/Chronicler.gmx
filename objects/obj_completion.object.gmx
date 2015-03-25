@@ -263,8 +263,10 @@ if(active || tempactive)
             ds_list_add(lst,"*line_break");
             ds_list_add(lst,"*page_break");
         }
-        with(obj_variable) if(type == vartype_global) ds_list_add(lst,name.text);
-        with(obj_variable) if(type == vartype_temp) ds_list_add(lst,name.text);
+        with(obj_variable) if(type == vartype_global)
+            ds_list_add(lst,name.text);
+        with(obj_variable) if(type == vartype_temp &amp;&amp; ds_list_find_index(current_scene.tempvars,id)&gt;-1)
+            ds_list_add(lst,name.text);
     }
     else
     {

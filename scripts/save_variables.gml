@@ -85,7 +85,8 @@ else if(!GUI_mode)
                 break;
             }
         }
-        if(ds_exists(line,ds_type_list)) ds_list_destroy(line);
+        //if(ds_exists(line,ds_type_list)) 
+        ds_list_destroy(line);
     }
     ds_list_destroy(lines);
     //cleanup extras

@@ -34,6 +34,7 @@ dropdown = ds_list_create();
 rows = 2;
     
 type = vartype_global;
+scene = current_scene;
 lastname = "";
 name = textbox_create();
     name.single_line = true;
@@ -131,7 +132,7 @@ if(!visible) exit;
             <string>if(mouse_check_button_pressed(mb_left))
 {
     var dd = in_rect(mouse_x,mouse_y,x-dropdown_width,y,dropdown_width,height*ds_list_size(dropdown));
-    selected = in_rect(mouse_x,mouse_y,x,y,width,height);
+    selected = in_rect(mouse_x,mouse_y,x,y,width,height) || in_rect(mouse_x,mouse_y,x,y,dropdown_width,height);
     if(selected)
     {
         //dropdown
@@ -180,7 +181,17 @@ if(refactorvars)
     {
         if(name.text != lastname)
         {
-            refactor_var(lastname,name.text);
+            if(type == vartype_temp)
+            {
+                var scene = noone;
+                with(obj_scene) if(ds_list_find_index(tempvars,other.id)&gt;-1)
+                    scene = id;
+                
+                if(scene != noone) refactor_var(lastname,name.text,scene);
+            }
+            else
+                refactor_var(lastname,name.text,"all");
+            
             lastname = name.text;
         }
     }
@@ -216,10 +227,13 @@ if(refactorvars)
     draw_rectangle_colour(x,y,x+width,y+height,colour,colour,colour,colour,true);
     
     var sname = "";
+    if(type == vartype_temp) sname = chr(10)+"("+scene.title.text+")";
+    ///*
     with(obj_scene)
     {
         if(ds_list_find_index(tempvars,other.id)&gt;-1) sname = chr(10)+"("+title.text+")";
     }
+    //*/
     
     draw_text_centered(x+dropdown_width/2,y+height/2,type+sname,c_black);
     draw_line_width_colour(x+dropdown_width,y,x+dropdown_width,y+height,4,colour,colour);
@@ -296,6 +310,7 @@ if(editable &amp;&amp; show_dropdown)
         {    
             if(in_rect(mouse_x,mouse_y,x1,y1,dropdown_width,height))
             {
+            ///*
                 if(type == vartype_temp)
                 {
                     with(obj_scene)
@@ -304,18 +319,21 @@ if(editable &amp;&amp; show_dropdown)
                         if(ind&gt;-1)ds_list_delete(tempvars,ind);
                     }
                 }
-                    
+            //*/
                 type = dropdown[| i];
                 show_dropdown = false;
                 
                 if(type == vartype_temp)
                 {
+                    scene = current_scene;
+                    ///*
                     with(obj_scene)
                     {
                         var ind = ds_list_find_index(tempvars,other.id);
                         if(ind&gt;-1) ds_list_delete(tempvars,ind);
                     }
                     ds_list_add(current_scene.tempvars,id);
+                    //*/
                 }
             }
         }

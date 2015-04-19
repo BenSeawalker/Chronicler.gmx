@@ -27,7 +27,7 @@ with(obj_variable) instance_destroy();
 ds_list_clear(var_screen.vars);
 gamevars =  '*title ' + project_name +chr(10)+
             '*author Your Name Here' +chr(10)+
-            '*create player_name "Steve"';
+            '*create king_name "Steve"';
 gamestats = "";
 
 

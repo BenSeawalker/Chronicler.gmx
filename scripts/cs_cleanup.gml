@@ -8,7 +8,8 @@ for(var i=0;i<ds_list_size(lst);i++)
     switch(mp[?"type"])
     {
         case "scene_list":
-            ds_list_destroy(mp[?"data"]);
+            if(ds_exists(mp,ds_type_list))
+                ds_list_destroy(mp[?"data"]);
         break;
         
         case "choice":
@@ -18,7 +19,9 @@ for(var i=0;i<ds_list_size(lst);i++)
             cs_cleanup(mp[?"data"]);
         break;
     }
-    ds_map_destroy(mp);
+    if(ds_exists(mp,ds_type_map))
+        ds_map_destroy(mp);
 }
 
-ds_list_destroy(lst);
+if(ds_exists(mp,ds_type_list))
+    ds_list_destroy(lst);

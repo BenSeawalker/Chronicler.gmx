@@ -14,6 +14,9 @@ with(instance_create(xx,yy,obj_scene))
     minheight = string_height(t) + 16;
     maxwidth = minwidth + 8;
     maxheight = minheight + 8;
+
     
     return id;
 }
+
+return noone;

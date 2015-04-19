@@ -142,6 +142,7 @@
     <script>scripts\copy_bubble.gml</script>
     <script>scripts\link_bubbles.gml</script>
     <script>scripts\reduce_path.gml</script>
+    <script>scripts\get_path_index.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

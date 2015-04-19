@@ -10,37 +10,41 @@ while(imp[?"type"] == "blank") imp = lns[|++index];
 var indent = ds_map_find_value(lns[|index],"indent");
     for(var i=index;i<ds_list_size(lns);i++)
     {
-        var mp = lns[|i];
-        if(mp[?"indent"] >= indent || string_length(mp[?"line"]) == 0)
+        var mp = ds_list_find_value(lns,i);
+        if(ds_exists(mp,ds_type_map))
         {
-            var obj = cs_proc_line(lns,i);
-            if(obj != -1)
+            if(mp[?"indent"] >= indent || string_length(mp[?"line"]) == 0)
             {
-                switch(obj[?"type"])
+                var obj = cs_proc_line(lns,i);
+                if(obj != -1)
                 {
-                    case "bubble":
-                    case "choice":
-                    case "fake_choice":
-                    case "scene_list":
-                    case "if":
-                    case "elseif":
-                    case "else":
+                    switch(obj[?"type"])
+                    {
+                        case "bubble":
+                        case "choice":
+                        case "fake_choice":
+                        case "scene_list":
+                        case "if":
+                        case "elseif":
+                        case "else":
+                            i = obj[?"index"];
+                        break;
+                    }
+                    
+                    /*
+                    if(obj[?"type"] == "bubble" || obj[?"type"] == "choice" || obj[?"type"] == "fake_choice" || obj[?"type"] == "scene_list" ||
+                        obj[?"type"] == "if" || obj[?"type"] == "elseif" || obj[?"type"] == "else")
+                    {
                         i = obj[?"index"];
-                    break;
+                    }*/
+                    ds_list_add(objs,obj);
                 }
-                /*
-                if(obj[?"type"] == "bubble" || obj[?"type"] == "choice" || obj[?"type"] == "fake_choice" || obj[?"type"] == "scene_list" ||
-                    obj[?"type"] == "if" || obj[?"type"] == "elseif" || obj[?"type"] == "else")
-                {
-                    i = obj[?"index"];
-                }*/
-                ds_list_add(objs,obj);
             }
-        }
-        else
-        {
-            ds_list_add(objs,i-1);
-            break;
+            else
+            {
+                ds_list_add(objs,i-1);
+                break;
+            }
         }
     }
 return objs;

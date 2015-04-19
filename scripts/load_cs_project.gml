@@ -35,6 +35,7 @@ if(path != "")
             change_scene(scene);
             
         var csdata = cs_to_data(path,true);
+        
         cs_proc_data(csdata,0,0,true);
         
         cs_cleanup(csdata);

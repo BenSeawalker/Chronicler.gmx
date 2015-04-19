@@ -145,7 +145,9 @@ for(var i=0;i<ds_list_size(lines);i++)
 //process lines
 var objs = cs_proc_block(lines,0);
 
+
 cs_sort_data(objs);
+
 
 /*
 //debug
@@ -171,7 +173,8 @@ for(var i=0;i<ds_list_size(lines);i++)
 //*/
 
 //ds_list_destroy(lines);
-ds_list_destroy(lastchoice);
+if(ds_exists(lastchoice,ds_type_list))
+    ds_list_destroy(lastchoice);
 
 
 

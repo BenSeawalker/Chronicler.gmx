@@ -12,6 +12,7 @@ switch_GUI_mode(false);
 var choiceScript,indent, bubbles, i;
 
 choiceScript = "";
+indent = "    ";
 bubbles = scene.bubbles;//sort_by_UID(true,scene);
 
 //variables
@@ -94,7 +95,7 @@ for(var i=0;i<ds_list_size(bubbles);i++)
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
     if(!processed[|i])
-        choiceScript += bubble_to_choicescript(bubbles,links,processed,i,0);
+        choicescript += bubble_to_choicescript(bubbles,links,processed,i);
 }
 
 switch_GUI_mode(mode);

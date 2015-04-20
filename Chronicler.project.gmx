@@ -98,6 +98,7 @@
     <scripts name="Data">
       <script>scripts\data_to_list.gml</script>
       <script>scripts\data_to_list_old.gml</script>
+      <script>scripts\data_to_choicescript_old.gml</script>
       <script>scripts\data_to_choicescript.gml</script>
       <script>scripts\clear_project.gml</script>
       <script>scripts\new_project.gml</script>
@@ -143,6 +144,7 @@
     <script>scripts\link_bubbles.gml</script>
     <script>scripts\reduce_path.gml</script>
     <script>scripts\get_path_index.gml</script>
+    <script>scripts\bubble_to_choicescript.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

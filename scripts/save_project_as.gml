@@ -4,6 +4,8 @@ if(sp != "")
     obj_ctrl.alarm[1] = -1;
     with(obj_scene) path = "";
     stats_path = "";
+    
+    use_new_compiler = show_question("Use new CS compiler?");
     save_choicescript();
     
     save_path = sp;

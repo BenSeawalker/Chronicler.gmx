@@ -39,14 +39,14 @@ var pv = ds_map_create();
     for(var i=0;i<ds_list_size(scene_list.scenes);i++)
     {
         var sm = ds_map_create();
-        //var tvars = ds_list_create();
-        /*
+        var tvars = ds_list_create();
+        
             for(var ii=0;ii<ds_list_size(scene_list.scenes[|i].tempvars);ii++)
             {
                 ds_list_add(tvars,string(scene_list.scenes[|i].tempvars[|ii].name.text));
             }
         ds_map_add(sm,"tvars",ds_list_write(tvars));
-        */
+        
         ds_map_add(sm,"title",string(scene_list.scenes[| i].title.text));
         ds_map_add(sm,"path",string(scene_list.scenes[| i].path));
         

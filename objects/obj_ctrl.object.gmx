@@ -29,7 +29,8 @@
 globalvar GUID, group_select, save_path,project_path,stats_path,saved, project_name, font_current,
             gamevars,gamestats, scene_list,current_scene, allbubbles,allchoices,program_version
             var_screen,GUI_mode, aspect_ratio,view_scale,
-            clipboard, pause, lag_time, actionlist, refactorvars, use_choice_bubbles;
+            clipboard, pause, lag_time, actionlist, refactorvars, use_choice_bubbles
+            use_new_compiler;
             
 program_version = "1.4.2";
 GUID = 0;
@@ -45,6 +46,7 @@ lag_time = 1;
 pause = false;
 refactorvars = true;
 use_choice_bubbles = true;
+use_new_compiler = false;
 
 instance_create(mouse_x,mouse_y,obj_mlink);
 instance_create(0,0,obj_undo);

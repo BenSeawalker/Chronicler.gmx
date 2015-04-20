@@ -1,4 +1,6 @@
 ///load_chronicler_project(path)
+var debug_pos = 1;
+
 var lp = "";
 var dat = false;
 
@@ -12,12 +14,10 @@ if(lp == "" && !dat)
     project_path = lp;
 }
 
-
 if(lp != "" || dat)
 {
     //autosave
     //obj_ctrl.alarm[1] = 1;
-    
     var mode = GUI_mode;
     //switch_GUI_mode(false);
     GUI_mode = false;
@@ -55,6 +55,7 @@ if(lp != "" || dat)
         ds_list_read(lst,lp);
     }
     
+    
     //project variables
     var pv = ds_map_create();
         ds_map_read(pv,lst[| 0]);
@@ -65,7 +66,7 @@ if(lp != "" || dat)
     
     project_name = pv[? "project_name"];
     GUID = pv[? "GUID"];
-    if(save_version < 141) gamevars = string(pv[? "gamevars"]);
+    gamevars = string(pv[? "gamevars"]);
     gamestats = string(pv[? "gamestats"]);
     if(save_version>=130)stats_path = string(pv[? "stats_path"]);
     scene_list.scene_count = pv[? "scene_count"];
@@ -103,7 +104,7 @@ if(lp != "" || dat)
     //scenes
     var sl = ds_list_create();
         ds_list_read(sl,pv[? "scenes"]);
-    
+        
     if(save_version >= old_version)
     {
         with(get_scene("startup"))
@@ -112,9 +113,11 @@ if(lp != "" || dat)
             var sm = ds_map_create();
                 ds_map_read(sm,sl[|0]);
                 
+            show_debug_message("load_chronicler_project: "+string(debug_pos++));
             //if(save_version < 141)
             //{
                 var tvars = ds_list_create();
+                if(!is_undefined(sm[? "tvars"]))
                     ds_list_read(tvars,sm[? "tvars"]);
                 for(var i=0;i<ds_list_size(tvars);i++)
                 {
@@ -144,6 +147,7 @@ if(lp != "" || dat)
             //if(save_version < 141)
             //{
                 var tvars = ds_list_create();
+                if(!is_undefined(sm[? "tvars"]))
                     ds_list_read(tvars,sm[? "tvars"]);
                 with(s)
                 {

@@ -149,7 +149,7 @@ if(!visible) exit;
 
 if(mouse_check_button_pressed(mb_right))
 {
-    if(in_rect(mouse_x,mouse_y,x,y,width,height))
+    if((type == vartype_global || type == vartype_temp) &amp;&amp; in_rect(mouse_x,mouse_y,x,y,width,height))
     {
         instance_destroy();
     }
@@ -189,7 +189,7 @@ if(refactorvars)
                 
                 if(scene != noone) refactor_var(lastname,name.text,scene);
             }
-            else
+            else if(type == vartype_global)
                 refactor_var(lastname,name.text,"all");
             
             lastname = name.text;

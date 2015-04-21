@@ -6,7 +6,8 @@ var sep,token;
 var txt = "";
 for(var i=0;i<ds_list_size(token);i++)
 {
-    txt += token[|i]+sep;
+    if(i>0) txt += sep;
+    txt += token[|i];
 }
 
 //ds_list_destroy(token);

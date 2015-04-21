@@ -35,13 +35,14 @@ rows = 2;
     
 type = vartype_global;
 scene = current_scene;
-lastname = "";
 name = textbox_create();
     name.single_line = true;
     name.color_text = c_black;
 value = textbox_create();
     value.single_line = true;
     value.color_text = c_black;
+    
+last_name = name.text;
 
 editable = true;
 
@@ -157,6 +158,20 @@ if(mouse_check_button_pressed(mb_right))
 </string>
           </argument>
         </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>425</id>
+        <kind>4</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
       </action>
       <action>
         <libid>1</libid>

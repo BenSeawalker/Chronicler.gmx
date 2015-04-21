@@ -145,6 +145,9 @@
     <script>scripts\reduce_path.gml</script>
     <script>scripts\get_path_index.gml</script>
     <script>scripts\bubble_to_choicescript.gml</script>
+    <script>scripts\string_replace_whole.gml</script>
+    <script>scripts\is_punct.gml</script>
+    <script>scripts\is_alnum.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

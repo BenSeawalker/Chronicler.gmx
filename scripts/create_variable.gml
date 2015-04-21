@@ -8,6 +8,7 @@
             if(type == vartype_title || type == vartype_author) rows = 1;
             //if(type == vartype_temp) ds_list_add(current_scene.tempvars,id);
         name.text = argument2;
+        last_name = argument2;
         value.text = argument3;
         editable = argument4;
         

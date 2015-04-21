@@ -181,15 +181,63 @@ if(mouse_check_button_pressed(mb_left))
 {
     if(h1)
     {
-        visible = false;
-        instance_activate_all();
+        var found = false;
         
-        save_variables();
+        with(obj_variable)
+        {
+            if(name.text == "")
+            {
+                found = true;
+                break;
+            }
+        }
+        if(found)
+        {
+            if(show_question("Some variables do not have names, and will be removed.#Do you wish to continue?"))
+            {
+                with(obj_variable)
+                {
+                    if(name.text == "")
+                    {
+                        instance_destroy();
+                    }
+                }
+                save_variables();
+                found = false;
+            }
+        }
         
-        view_xview[0] = view_x;
-        view_yview[0] = view_y;
-        view_scale = view_s;
-        change_scene(current_scene);
+        if(!found)
+        {
+            if(refactorvars)
+            {
+                with(obj_variable)
+                {
+                    if(name.text != last_name &amp;&amp; last_name != "")
+                    {
+                        if(type == vartype_temp)
+                        {
+                            var scene = noone;
+                            with(obj_scene) if(ds_list_find_index(tempvars,other.id)&gt;-1)
+                                scene = id;
+                            
+                            if(scene != noone) refactor_var(last_name,name.text,scene);
+                        }
+                        else if(type == vartype_global)
+                            refactor_var(last_name,name.text,"all");
+                    }
+                }
+            }
+            visible = false;
+            instance_activate_all();
+            
+            save_variables();
+            
+            view_xview[0] = view_x;
+            view_yview[0] = view_y;
+            view_scale = view_s;
+            change_scene(current_scene);
+        }
     }
 }
 </string>

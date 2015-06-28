@@ -32,7 +32,7 @@ globalvar GUID, group_select, save_path,project_path,stats_path,saved, project_n
             clipboard, pause, lag_time, actionlist, refactorvars, use_choice_bubbles
             use_new_compiler;
             
-program_version = "1.4.3";
+program_version = "1.4.4";
 GUID = 0;
 project_name = "";
 save_path = "";
@@ -46,7 +46,7 @@ lag_time = 1;
 pause = false;
 refactorvars = true;
 use_choice_bubbles = true;
-use_new_compiler = false;
+use_new_compiler = true;
 
 instance_create(mouse_x,mouse_y,obj_mlink);
 instance_create(0,0,obj_undo);
@@ -317,27 +317,6 @@ if(cont)
             <kind>1</kind>
             <string>///autosave
 alarm[1] = room_speed*10;
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>show_debug_message(string_replace_whole("Hello World, Farewell World","World","Earth"));
 </string>
           </argument>
         </arguments>

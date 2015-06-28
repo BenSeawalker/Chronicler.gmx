@@ -99,6 +99,8 @@
       <script>scripts\data_to_list.gml</script>
       <script>scripts\data_to_list_old.gml</script>
       <script>scripts\data_to_choicescript_old.gml</script>
+      <script>scripts\data_to_choicescript_new_old.gml</script>
+      <script>scripts\data_to_choicescript_new_old_old.gml</script>
       <script>scripts\data_to_choicescript.gml</script>
       <script>scripts\clear_project.gml</script>
       <script>scripts\new_project.gml</script>
@@ -148,6 +150,8 @@
     <script>scripts\string_replace_whole.gml</script>
     <script>scripts\is_punct.gml</script>
     <script>scripts\is_alnum.gml</script>
+    <script>scripts\bubble_chronologize.gml</script>
+    <script>scripts\is_fake_choice.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>

@@ -12,7 +12,11 @@ switch_GUI_mode(false);
 var choiceScript,indent, bubbles, i;
 
 choiceScript = "";
-bubbles = scene.bubbles;//sort_by_UID(true,scene);
+var tmpb = ds_list_write(scene.bubbles);
+bubbles = ds_list_create();
+ds_list_read(bubbles,tmpb);
+
+indent = "    ";
 
 //variables
 if(scene == get_scene("startup"))
@@ -42,11 +46,11 @@ for(var i=0;i<ds_list_size(scene.tempvars);i++)
 }
 choiceScript += chr(10);
 
-
+show_debug_message("linking");
 var links = ds_list_create();
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
-    ds_list_add(links,0);
+    ds_list_add(links,ds_map_create());
         
     for(var j=0;j<ds_list_size(bubbles);j++)
     {
@@ -58,24 +62,24 @@ for(var i=0;i<ds_list_size(bubbles);i++)
                 {
                     case obj_bubble:
                         if(output.link == bubbles[| i])
-                            links[| i]++;
+                            ds_map_add(links[|i],bubbles[|j],false);
                     break;
                     case obj_choice_bubble:
                         for(var k=0;k<ds_list_size(choices);k++)
                         {
-                            if(choices[| k].link == bubbles[| i])
-                                links[| i]++;
+                            if(choices[| k].output.link == bubbles[| i])
+                                ds_map_add(links[|i],bubbles[|j],false);
                         }
                     break;
                     case obj_condition:
                         if(out_true.link == bubbles[| i])
-                            links[| i]++;
+                            ds_map_add(links[|i],bubbles[|j],false);
                         if(out_false.link == bubbles[| i])
-                            links[| i]++;
+                            ds_map_add(links[|i],bubbles[|j],false);
                     break;
                     case obj_action:
                         if(output.link == bubbles[| i])
-                            links[| i]++;
+                            ds_map_add(links[|i],bubbles[|j],false);
                     break;
                 }
             }
@@ -83,16 +87,75 @@ for(var i=0;i<ds_list_size(bubbles);i++)
     }
 }
 
-var processed = ds_list_create();
+var chrono = ds_list_create();
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
-    ds_list_add(processed,false);
+    ds_list_add(chrono, -1);
+}
+var iteration;
+for(var i=0;i<ds_list_size(bubbles);i++)
+{
+    if(bubbles[|i].start)
+    {
+        show_debug_message("Chronologizing");
+        iteration = bubble_chronologize(chrono,bubbles,bubbles[|i],0,0,links,-1);
+        break;
+    }
+}
+show_debug_message("iterations: " + string(iteration));
+
+
+show_debug_message("sorting");
+var sorted = false;
+var sz = ds_list_size(chrono);
+var iterations = 0;
+for (var i = 0; i < sz; i++)
+{
+    iterations++;
+    sorted = true;
+    for (var j = 0; j < sz - i; j++)
+    {
+        //ds_list_sort(chrono[|j],true);
+        //ds_list_sort(chrono[|j+1],true);
+        var b1 = chrono[|j];//ds_list_find_index(chrono[|j],0);
+        var b2 = chrono[|j+1];//ds_list_find_index(chrono[|j+1],0);
+        if (b1 > b2)
+        {
+            sorted = false
+            
+            //swap chrono
+            var tmp = chrono[|j];
+            chrono[|j] = chrono[|j+1];
+            chrono[|j+1] = tmp;
+            
+            ////swap bubbles
+            tmp = bubbles[|j];
+            bubbles[|j] = bubbles[|j+1];
+            bubbles[|j+1] = tmp;
+            
+            //swap links
+            tmp = links[|j];
+            links[|j] = links[|j+1];
+            links[|j+1] = tmp;
+        }
+    }
+    if (sorted) break;
 }
 
+show_debug_message("done sorting: "+string(iterations)+" iterations.");
+
+
+show_debug_message("processing");
+processed = ds_list_create();
+for(var i=0;i<ds_list_size(bubbles);i++)
+{
+    processed[|i] = false;
+}
 
 //bubbles
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
+    //show_debug_message(string(ds_list_find_value(chrono[|i],0)));
     if(!processed[|i])
         choiceScript += bubble_to_choicescript(bubbles,links,processed,i,0);
 }

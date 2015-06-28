@@ -5,7 +5,7 @@ if(sp != "")
     with(obj_scene) path = "";
     stats_path = "";
     
-    use_new_compiler = show_question("Use new CS compiler?");
+    //use_new_compiler = show_question("Use new CS compiler?");
     save_choicescript();
     
     save_path = sp;

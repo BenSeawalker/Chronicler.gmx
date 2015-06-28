@@ -18,25 +18,43 @@ if(!processed[|index])
     {
         processed[|index] = true;
         
-        if(links[|index] > 1)
-            choiceScript += "*label "+label+chr(10);
+        choiceScript += chr(10);
+        
+        var make_label = (ds_map_size(links[|index]) > 1);
+        ///*
+        if(!make_label)
+        {   
+            var first = ds_map_find_first(links[|index]);
+            if(first > -1)
+            {
+                var ind = ds_list_find_index(bubbles,first);
+                make_label = ((ind > index) || (is_fake_choice(first)));
+            }
+        }
+        //*/
+        
+        //show_debug_message(object_get_name(object_index) + " : " + string(ds_map_find_first(links[|index]).object_index == obj_choice_bubble) + string(is_fake_choice(ds_map_find_first(links[|index]))));
+        if(make_label)
+            choiceScript += chr(10)+chr(10)+indent_str+"*label "+label + chr(10);
         
         switch(object_index)
         {
             case obj_bubble:
+                //show_debug_message(label + " : " + string(index));
+                //if(string_char_at(tbox.text,1) == chr(10)) tbox.text = string_copy(tbox.text,2,string_length(tbox.text));
                 choiceScript += indent_str + string_replace_all(tbox.text,chr(10),chr(10)+indent_str);
                 if(tbox.text != "") choiceScript += chr(10);
                 
                 if(output.link != noone)
                 {
                     var ind = ds_list_find_index(bubbles,output.link);
-                    if(links[|ind] > 1)
+                    if(ds_map_size(links[|ind]) > 1 || (ind < index))// || ds_map_size(links[|index]) > 1)
                         choiceScript += indent_str + "*goto "+output.link.label;
                     else
                        choiceScript += bubble_to_choicescript(bubbles,links,processed,ds_list_find_index(bubbles,output.link),indent_level);
                 }
                 else
-                    choiceScript += "*finish";
+                    choiceScript += indent_str+"*finish";
             break;
             
             case obj_choice_bubble:
@@ -52,7 +70,7 @@ if(!processed[|index])
                             if(output.link != noone)
                             {
                                 var ind = ds_list_find_index(bubbles,output.link);
-                                if(links[|ind] > 1)
+                                if(is_fake_choice(other) || (ds_map_size(links[|ind]) > 1 || (ind < index)))
                                     choiceScript += indent_str + indent+indent+"*goto "+output.link.label;
                                 else
                                    choiceScript += bubble_to_choicescript(bubbles,links,processed,ind,indent_level+2);
@@ -69,13 +87,13 @@ if(!processed[|index])
                 if(out_true.link!=noone)
                 {
                     var ind = ds_list_find_index(bubbles,out_true.link);
-                    if(links[|ind] > 1)
+                    if(ds_map_size(links[|ind]) > 1 || (ind < index))
                         choiceScript += indent_str + indent + "*goto "+out_true.link.label;
                     else
                         choiceScript += bubble_to_choicescript(bubbles,links,processed,ind,indent_level+1);
                 }
                 else 
-                    choiceScript += "*finish";
+                    choiceScript += indent_str+"*finish";
                 
                 if(out_false.link!=noone)
                 {
@@ -83,21 +101,22 @@ if(!processed[|index])
                         choiceScript += chr(10)+indent_str+"*else"+chr(10);
                         
                     var ind = ds_list_find_index(bubbles,out_false.link);
-                    if(links[|ind] > 1)
+                    if(ds_map_size(links[|ind]) > 1 || (ind < index))
                         choiceScript += indent_str+indent + "*goto "+out_false.link.label;
                     else
                         choiceScript += bubble_to_choicescript(bubbles,links,processed,ind,indent_level+1);
                 }
                 else
-                    choiceScript += "*finish";
+                    choiceScript += indent_str+"*finish";
             break;
             
             case obj_action:
+                //show_debug_message(tbox.text + " : " + string(index));
                 choiceScript += indent_str + tbox.text+chr(10);
                 if(output.link!=noone)
                 {
                     var ind = ds_list_find_index(bubbles,output.link);
-                    if(links[|ind] > 1)
+                    if(ds_map_size(links[|ind]) > 1 || (ind < index))
                         choiceScript += indent_str + "*goto "+output.link.label;
                     else
                         choiceScript += bubble_to_choicescript(bubbles,links,processed,ind,indent_level);
@@ -107,7 +126,7 @@ if(!processed[|index])
             break;
         }
         
-        choiceScript += chr(10);
+        //choiceScript += chr(10);
     }
 }
 return choiceScript;

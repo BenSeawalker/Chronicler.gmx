@@ -28,7 +28,7 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
         //save to file
         var choiceScript = "";
         if(use_new_compiler)
-            show_popup("Using new compiler...");
+            choiceScript = data_to_choicescript(sc);
         else
             choiceScript = data_to_choicescript_old(sc);
         

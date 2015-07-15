@@ -77,5 +77,7 @@ for(i=0;i<ds_list_size(current_scene.bubbles);i++)
         }
     }
 }
+
+//chronologize_bubbles(current_scene.bubbles);
 //show_debug_message(string(i));
 //show_debug_message("done changing");

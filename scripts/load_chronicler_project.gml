@@ -200,6 +200,12 @@ if(lp != "" || dat)
                 with(instance_create(mp[? "x"],mp[? "y"],obj_bubble))
                 {
                     UID = mp[? "UID"];
+                    
+                    if(ds_map_exists(mp,"order"))
+                        order = mp[? "order"];
+                    if(ds_map_exists(mp,"order_locked"))
+                        order_locked = mp[? "order_locked"];
+                        
                     width = max(mp[? "width"],targetwidth);
                     height = max(mp[? "height"],targetheight);
                         targetwidth = width;
@@ -209,10 +215,11 @@ if(lp != "" || dat)
                     
                     tbox.text = string(mp[? "tbox"]);
                     title.text = mp[? "title"];
-                    label = get_label(title.text,UID);
+//                    label = get_label(title.text,UID);
                     
                     output.link = mp[? "output"];
                     
+                    //the third item in the list is always the intro bubble...
                     if(i==3) bubble_intro = id;
                 }
             break;
@@ -222,6 +229,12 @@ if(lp != "" || dat)
                 with(instance_create(mp[? "x"],mp[? "y"],obj_condition))
                 {
                     UID = mp[? "UID"];
+                    
+                    if(ds_map_exists(mp,"order"))
+                        order = mp[? "order"];
+                    if(ds_map_exists(mp,"order_locked"))
+                        order_locked = mp[? "order_locked"];
+                    
                     width = mp[? "width"];
                     height = mp[? "height"];
                     targetwidth = width;
@@ -239,6 +252,12 @@ if(lp != "" || dat)
                 with(instance_create(mp[? "x"],mp[? "y"],obj_action))
                 {
                     UID = mp[? "UID"];
+                    
+                    if(ds_map_exists(mp,"order"))
+                        order = mp[? "order"];
+                    if(ds_map_exists(mp,"order_locked"))
+                        order_locked = mp[? "order_locked"];
+                    
                     width = mp[? "width"];
                     height = mp[? "height"];
                     targetwidth = width;
@@ -259,6 +278,12 @@ if(lp != "" || dat)
                     with(instance_create(mp[? "x"],mp[? "y"],obj_choice_bubble))
                     {
                         UID = mp[? "UID"];
+                        
+                        if(ds_map_exists(mp,"order"))
+                        order = mp[? "order"];
+                        if(ds_map_exists(mp,"order_locked"))
+                            order_locked = mp[? "order_locked"];
+                        
                         width = mp[? "width"];
                         height = mp[? "height"];
                         shift_y = real(mp[?"shift_y"]);
@@ -433,4 +458,9 @@ if(lp != "" || dat)
     save_variables();
     GUI_mode = mode;
     change_scene(get_scene(load_scene));
+    
+    for(var i=0;i<ds_list_size(scene_list.scenes);i++)
+    {
+        chronologize_bubbles(scene_list.scenes[|i].bubbles);
+    }
 }

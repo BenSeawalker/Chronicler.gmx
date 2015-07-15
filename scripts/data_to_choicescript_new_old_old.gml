@@ -45,19 +45,15 @@ for(var i=0;i<ds_list_size(scene.tempvars);i++)
 }
 choiceScript += chr(10);
 
+show_debug_message("processing");
+var processed = ds_list_create();
+for(var i=0;i<ds_list_size(bubbles);i++)
+{
+    ds_list_add(processed,false);
+}
 
-//var links = ds_list_create();
-var chrono = ds_list_create();
-for(var i=0;i<ds_list_size(bubbles);i++)
-{
-    ds_list_add(chrono, ds_list_create());
-}
-for(var i=0;i<ds_list_size(bubbles);i++)
-{
-    if(bubbles[|i].start)
-        bubble_chronologize(chrono,bubbles,bubbles[|i],0);
-}
-/*
+show_debug_message("linking");
+var links = ds_list_create();
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
     ds_list_add(links,0);
@@ -77,7 +73,7 @@ for(var i=0;i<ds_list_size(bubbles);i++)
                     case obj_choice_bubble:
                         for(var k=0;k<ds_list_size(choices);k++)
                         {
-                            if(choices[| k].link == bubbles[| i])
+                            if(choices[| k].output.link == bubbles[| i])
                                 links[| i]++;
                         }
                     break;
@@ -96,43 +92,76 @@ for(var i=0;i<ds_list_size(bubbles);i++)
         }
     }
 }
-*/
-var processed = ds_list_create();
+
+var chrono = ds_list_create();
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
-    ds_list_add(processed,false);
+    ds_list_add(chrono, -1);
+}
+var iteration;
+for(var i=0;i<ds_list_size(bubbles);i++)
+{
+    if(bubbles[|i].start)
+    {
+        show_debug_message("Chronologizing");
+        iteration = bubble_chronologize(chrono,bubbles,bubbles[|i],0,processed,links);
+        break;
+    }
+}
+show_debug_message("iterations: " + string(iteration));
+
+show_debug_message("processing");
+for(var i=0;i<ds_list_size(bubbles);i++)
+{
+    processed[|i] = false;
 }
 
+
+show_debug_message("sorting");
 var sorted = false;
 var sz = ds_list_size(chrono);
-for (var i = 0; i < sz - 1; i++)
+var iterations = 0;
+for (var i = 0; i < sz; i++)
 {
+    iterations ++;
     sorted = true;
-    for (var j = 0; j < sz - i - 1; j++)
+    for (var j = 0; j < sz - i; j++)
     {
-        ds_list_sort(chrono[|j],true);
-        ds_list_sort(chrono[|j+1],true);
-        var b1 = ds_list_find_index(chrono[|j],0);
-        var b2 = ds_list_find_index(chrono[|j+1],0);
-        if (b1 < b2)
+        //ds_list_sort(chrono[|j],true);
+        //ds_list_sort(chrono[|j+1],true);
+        var b1 = chrono[|j];//ds_list_find_index(chrono[|j],0);
+        var b2 = chrono[|j+1];//ds_list_find_index(chrono[|j+1],0);
+        if (b1 > b2)
         {
             sorted = false
             var tmp = chrono[|j];
             chrono[|j] = chrono[|j+1];
             chrono[|j+1] = tmp;
+            
             tmp = bubbles[|j];
             bubbles[|j] = bubbles[|j+1];
             bubbles[|j+1] = tmp;
+            
+            tmp = links[|j];
+            links[|j] = links[|j+1];
+            links[|j+1] = tmp;
+            
+            tmp = processed[|j];
+            processed[|j] = processed[|j+1];
+            processed[|j+1] = tmp;
         }
     }
     if (sorted) break;
 }
 
+show_debug_message("done sorting: "+string(iterations)+" iterations.");
+
 //bubbles
 for(var i=0;i<ds_list_size(bubbles);i++)
 {
+    //show_debug_message(string(ds_list_find_value(chrono[|i],0)));
     if(!processed[|i])
-        choiceScript += bubble_to_choicescript(bubbles,chrono,processed,i,0);
+        choiceScript += bubble_to_choicescript(bubbles,links,processed,i,0);
 }
 
 switch_GUI_mode(mode);

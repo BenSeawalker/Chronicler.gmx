@@ -51,6 +51,8 @@ if(selected)
         if(b!=owner &amp;&amp; b!=noone) b.highlight = false;
         else link = noone;
         selected = false;
+        
+        chronologize_bubbles(current_scene.bubbles);
     }
 }
 </string>

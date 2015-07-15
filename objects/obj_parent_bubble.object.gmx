@@ -25,10 +25,16 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>scene = current_scene;
+            <string>///variables
+scene = current_scene;
 ds_list_add(current_scene.bubbles,id);
 ds_list_add(allbubbles,id);
 UID = get_new_UID();
+
+orderbox = textbox_create();
+    orderbox.single_line = true;
+    ordertext = "";
+    //orderbox.color_text = c_black;
 
 start = (instance_number(obj_parent_bubble) == 1);
 
@@ -36,16 +42,16 @@ label = "label_"+string(UID);
 switch(object_index)
 {
     case obj_bubble:
-        label = "bubble_"+string(UID);
+        label = "Bubble_"+string(UID);
     break;
     case obj_choice_bubble:
         label = "Choice_"+string(UID);
     break;
     case obj_condition:
-        label = "condition_"+string(UID);
+        label = "Condition_"+string(UID);
     break;
     case obj_action:
-        label = "action_"+string(UID);
+        label = "Action_"+string(UID);
     break;
 }
 
@@ -58,6 +64,11 @@ resize = false;
 drag = false;
 colour = c_teal;
 clicks = 0;
+
+order = 0;
+order_locked = start;
+order_pos = 0;
+
 
 right_selected = false;
 
@@ -82,6 +93,28 @@ height = 0;
 
 view_xprev = view_xview[0]+1;
 view_yprev = view_yview[0]+1;
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///chronologize
+chronologize_bubbles(current_scene.bubbles);
 </string>
           </argument>
         </arguments>
@@ -213,7 +246,7 @@ if(keyboard_check(vk_control) &amp;&amp; selected)
                 with(instance_create(x,y+height+100,obj_bubble))
                 {
                     title.text = other.title.text;
-                        label = get_label(title.text,UID);
+//                        label = get_label(title.text,UID);
                     tbox.text = other.tbox.text;
                     colour = other.colour;
                     
@@ -384,6 +417,82 @@ if(instance_number(obj_parent_bubble) == 1)
             <string>///flag: delete
 //add_undo();
 instance_destroy();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///orderbox
+
+order_pos = lerp(order_pos,38*order_visible-2,0.1*lag_time);
+
+if(order_pos &gt; 0)
+{
+    var x1,y1,x2,y2;
+    x1 = x+width-max(64,string_width(orderbox.text)+16);
+    y1 = y-order_pos;
+    x2 = x+width-6;
+    y2 = y-order_pos+36;
+    
+    //draw background
+    var c = c_black;
+    if(selected || highlight) c = c_orange;
+    draw_roundrect_colour(x1-4,y1-4,x2+4,y2+4,colour,colour,false);
+    draw_roundrect_colour(x1-4,y1-4,x2+4,y2+4,c,c,true);
+    
+    //draw lock
+    draw_sprite_stretched(spr_icons,123-order_locked,x2-12,y1,12,12);
+    draw_rectangle_colour(x2-12,y1,x2,y1+12,c_black,c_black,c_black,c_black,true);
+    if(!start)
+    {
+        if(order_locked) draw_rectangle_colour(x2-12,y1,x2,y1+12,c_red,c_red,c_red,c_red,true);
+        //select lock
+        if(in_rect(mouse_x,mouse_y,x2-12,y1,12,12))
+        {
+            draw_rectangle_colour(x2-12,y1,x2,y1+12,c_orange,c_orange,c_orange,c_orange,true);
+            if(mouse_check_button_pressed(mb_left))
+            {
+                mouse_clear(mb_left);
+                order_locked = !order_locked;
+                textbox_focus = -1;
+                selected = true;
+            }
+        }
+    }
+    
+    //draw orderbox
+    if(selected &amp;&amp; order_locked &amp;&amp; !start)
+    {
+        var txt = orderbox.text;
+        textbox_draw(orderbox,x1,y1+8,x2,y2,false,false);
+        if(orderbox.text != txt)
+        {
+            order = real(orderbox.text);
+            orderbox.text = string(order);
+        }
+    }
+    else
+    {
+        textbox_draw_simple(orderbox,x1,y1+8,x2,y2);
+    }
+}
 </string>
           </argument>
         </arguments>

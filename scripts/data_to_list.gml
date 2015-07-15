@@ -86,6 +86,8 @@ for(var ii=0;ii<ds_list_size(scene_list.scenes);ii++)
                 ds_map_add(mp,"width",real(width));
                 ds_map_add(mp,"height",real(height));
                 ds_map_add(mp,"col",real(colour));
+                ds_map_add(mp,"order",real(order));
+                ds_map_add(mp,"order_locked",real(order_locked));
                 if(use_choice_bubbles)
                     ds_map_add(mp,"shift_y",real(shift_y));
                 else

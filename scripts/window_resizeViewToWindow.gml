@@ -6,10 +6,10 @@ if ( view_wport[argument0] != window_get_width() or view_hport[argument0] != win
      * We need to save window position and size for later usage
      * Because using display_reset() window size and position will be reset to what it was before.
     */
-    var ww = window_get_width();
-    var hh = window_get_height();
     var xx = window_get_x();
     var yy = window_get_y();
+    var ww = window_get_width();
+    var hh = window_get_height();
     /*
      * display_reset() is the key for pixel perfect resizing
      * Now we reset the display , without that it will look blurry and awful.
@@ -27,5 +27,7 @@ if ( view_wport[argument0] != window_get_width() or view_hport[argument0] != win
         //view_hview[argument0] = hh;
         view_wport[argument0] = ww;
         view_hport[argument0] = hh;
+        aspect_ratio = view_wport[0]/view_hport[0];
+        set_view_scale(view_scale);
     }
 }

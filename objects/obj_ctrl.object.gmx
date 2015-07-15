@@ -30,9 +30,9 @@ globalvar GUID, group_select, save_path,project_path,stats_path,saved, project_n
             gamevars,gamestats, scene_list,current_scene, allbubbles,allchoices,program_version
             var_screen,GUI_mode, aspect_ratio,view_scale,
             clipboard, pause, lag_time, actionlist, refactorvars, use_choice_bubbles
-            use_new_compiler;
+            use_new_compiler, order_visible;
             
-program_version = "1.4.4";
+program_version = "1.4.7";
 GUID = 0;
 project_name = "";
 save_path = "";
@@ -47,6 +47,8 @@ pause = false;
 refactorvars = true;
 use_choice_bubbles = true;
 use_new_compiler = true;
+
+order_visible = true;
 
 instance_create(mouse_x,mouse_y,obj_mlink);
 instance_create(0,0,obj_undo);
@@ -179,11 +181,13 @@ var fm = instance_create(i,0,obj_file_menu);
     add_file_component(fm,fm_left,spr_icons,162,load_cs_project,"Import Project");
     add_file_component(fm,fm_left,spr_icons,15,save_project,"Save Project");
     add_file_component(fm,fm_left,spr_icons,160,save_project_as,"Save Project As");
+    
     //right
-    //add_file_component(fm,fm_right,spr_icons,161,load_cs_project,"Import ChoiceScript Project");
     add_file_component(fm,fm_right,spr_icons,161,show_choicescript,"Show Choicescript");
     add_file_component(fm,fm_right,spr_icons,89,show_stats,"Show Stats Screen");
     add_file_component(fm,fm_right,spr_icons,114,show_license,"License Information");
+    add_file_component(fm,fm_right,spr_icons,143,toggle_order_visibility,"Toggle Order Visibility");
+    
     //center
     add_file_component(fm,fm_center,spr_icons,4,-1,"Settings (Unavailable)");
     add_file_component(fm,fm_center,spr_icons,10,show_website,"Website");
@@ -458,7 +462,7 @@ if(pause) exit;
 var editing = textbox_focus;
 
 //zoom
-if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible &amp;&amp; textbox_focus = -1)
+if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible &amp;&amp; (textbox_focus == -1 || (textbox_focus.single_line)))
 {
     var scale = 0.125;
     if(mouse_wheel_down() || (keyboard_check_pressed(ord('Q'))))// &amp;&amp; !editing))
@@ -572,7 +576,11 @@ if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible)
 var sel = instance_exists(obj_message);
 with(obj_parent_bubble) if(selected &amp;&amp; clicks&gt;1) {sel = true; break;}
 
-
+if(keyboard_check_pressed(ord('F')))
+{
+//    instance_create(10,10,obj_font_picker);
+}
+    
 if(keyboard_check(vk_control))
 {
     //ctrl+ *

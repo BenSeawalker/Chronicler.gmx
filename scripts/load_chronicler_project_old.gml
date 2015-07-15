@@ -151,7 +151,7 @@ if(lp != "" || dat)
                     
                     tbox.text = mp[? "tbox"];
                     title.text = mp[? "title"];
-                    label = get_label(title.text,UID);
+//                    label = get_label(title.text,UID);
                     
                     output.link = mp[? "output"];
                     

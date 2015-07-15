@@ -34,6 +34,7 @@
       <script>scripts\bubble_at_point.gml</script>
       <script>scripts\choice_at_point.gml</script>
       <script>scripts\get_label.gml</script>
+      <script>scripts\get_label_old.gml</script>
       <scripts name="choices">
         <script>scripts\create_choice.gml</script>
         <script>scripts\add_choice_to_bubble.gml</script>
@@ -91,9 +92,17 @@
         <script>scripts\add_variable.gml</script>
         <script>scripts\variable_exists.gml</script>
       </scripts>
-      <script>scripts\add_file_component.gml</script>
       <script>scripts\show_popup.gml</script>
       <script>scripts\draw_completion.gml</script>
+      <script>scripts\add_file_component.gml</script>
+      <scripts name="Menu items">
+        <script>scripts\show_license.gml</script>
+        <script>scripts\show_choicescript.gml</script>
+        <script>scripts\show_stats.gml</script>
+        <script>scripts\show_variables.gml</script>
+        <script>scripts\show_website.gml</script>
+        <script>scripts\toggle_order_visibility.gml</script>
+      </scripts>
     </scripts>
     <scripts name="Data">
       <script>scripts\data_to_list.gml</script>
@@ -131,13 +140,6 @@
         <script>scripts\cs_arrange_bubbles.gml</script>
         <script>scripts\cs_cleanup.gml</script>
       </scripts>
-      <scripts name="Menu items">
-        <script>scripts\show_license.gml</script>
-        <script>scripts\show_choicescript.gml</script>
-        <script>scripts\show_stats.gml</script>
-        <script>scripts\show_variables.gml</script>
-        <script>scripts\show_website.gml</script>
-      </scripts>
     </scripts>
     <script>scripts\draw_connection_path.gml</script>
     <script>scripts\draw_connection_path_new.gml</script>
@@ -151,7 +153,9 @@
     <script>scripts\is_punct.gml</script>
     <script>scripts\is_alnum.gml</script>
     <script>scripts\bubble_chronologize.gml</script>
+    <script>scripts\chronologize_bubbles.gml</script>
     <script>scripts\is_fake_choice.gml</script>
+    <script>scripts\connections_from.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_main</font>
@@ -216,6 +220,7 @@
       <object>objects\obj_stat_screen</object>
       <object>objects\obj_stat</object>
     </objects>
+    <object>objects\obj_font_picker</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_main</room>

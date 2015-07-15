@@ -151,7 +151,7 @@ if(mouse_check_button_pressed(mb_left) &amp;&amp; selected) tbox.read_only = (++
 
 if(textbox_focus == title)
 {
-    label = get_label(title.text,UID);
+    label = title.text;//get_label(title.text,UID);
     
     if(keyboard_check_pressed(vk_tab))
     {
@@ -316,7 +316,7 @@ if(selected || right_selected || group_selected || highlight) selcol = c_orange;
     var h = string_height("W")+5;
 draw_roundrect_colour(x+10,y-h-5,x+width/2+20,y+5,colour,colour,false);
 draw_roundrect_colour(x+10,y-h-5,x+width/2+20,y+5,selcol,selcol,true);
-if(selcol == c_orange || new)
+if(selected || new)
 {
     textbox_draw(title,x+5+10,y-h,x+width/2+15,y-5,false);
     new = false;

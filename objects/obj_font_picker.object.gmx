@@ -5,23 +5,34 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>obj_choice_parent</parentName>
+  <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
-    <event eventtype="3" enumb="0">
+    <event eventtype="0" enumb="0">
       <action>
         <libid>1</libid>
-        <id>604</id>
-        <kind>0</kind>
+        <id>603</id>
+        <kind>7</kind>
         <userelative>0</userelative>
         <isquestion>0</isquestion>
-        <useapplyto>0</useapplyto>
-        <exetype>1</exetype>
-        <functionname>action_inherited</functionname>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
         <codestring></codestring>
         <whoName>self</whoName>
         <relative>0</relative>
         <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///initialize
+
+fonts = ds_list_create();
+
+index = 0;
+</string>
+          </argument>
+        </arguments>
       </action>
       <action>
         <libid>1</libid>
@@ -39,27 +50,34 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if(selected)
+            <string>///find fonts
+fonts[|0] = FS_file_find_first("%windir%\Fonts\*.ttf",0);
+
+var i = 0;
+var fontdir = environment_get_variable("windir")+"\Fonts\";
+var targetdir = environment_get_variable("localappdata")+"\Chronicler\Fonts\";
+while(fonts[|i] != "")
 {
-    deselect_all(owner);
-    var b = bubble_at_point(mouse_x,mouse_y);
-    if(b!=owner.owner &amp;&amp; b!=noone){link = b; b.highlight = true;}
-    else link = obj_mlink;
-    if(mouse_check_button_released(mb_left))
+    
+    if(!FS_file_exists(targetdir+fonts[|i]))
     {
-        if(b!=owner.owner &amp;&amp; b!=noone) b.highlight = false;
-        else link = noone;
-        selected = false;
+        show_debug_message(fontdir+fonts[|i]);
+        show_debug_message(targetdir+fonts[|i]);
+        show_debug_message("");
         
-        chronologize_bubbles(current_scene.bubbles);
+        FS_directory_create(targetdir);
+        FS_file_copy(fontdir+fonts[|i],targetdir+fonts[|i]);
     }
+    fonts[|++i] = FS_file_find_next();
 }
+
+FS_file_find_close();
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="0">
+    <event eventtype="1" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -76,35 +94,13 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var sc = colour;
-if(hover || selected) {sc = c_orange; with(obj_choice_parent)depth=1; depth=-1;}
-
-draw_roundrect_colour(x,y,x+width,y+height,colour,colour,false); // body
-draw_roundrect_colour(x,y,x+width,y+height,sc,sc,true); // outline
-draw_text_centered(x+width/2,y+height/2,title,c_text);
-
-
-if(link!=noone)
-    //draw_connection_path(x+width,y+height/2,link,sc,true, owner.owner);
-    draw_connection_side(ds_list_find_index(owner.owner.choices,owner),id,link,sc);
+            <string>ds_list_destroy(fonts);
 </string>
           </argument>
         </arguments>
       </action>
-      <action>
-        <libid>1</libid>
-        <id>425</id>
-        <kind>4</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>0</useapplyto>
-        <exetype>0</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-      </action>
+    </event>
+    <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -121,12 +117,66 @@ if(link!=noone)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_roundrect_colour(x,y,x+width,y+height,colour,colour,false);
-draw_text_centered(x+width/2,y+height/2,title,c_white);
+            <string>if(mouse_wheel_down())
+{
+    index = max(index-1,0);
+    
+    var fname = "Fonts\"+fonts[|index];//string_copy(fonts[|index],1,string_length(fonts[|index])-4);
+    show_debug_message(fname);
+    
+    if(current_font != fnt_main)
+        font_delete(current_font);
+    current_font = font_add(fname,13,false,false,32,128);
+    draw_set_font(current_font);
+}
 
-var sc = colour;
-if(hover || selected) {sc = c_orange; with(obj_choice_parent)depth=1; depth=-1;}
-if(link!=noone) draw_connection_path(x+width,y+height/2,link,sc,true);//draw_connection(0,id,link,sc);
+if(mouse_wheel_up())
+{
+    index = min(index+1,ds_list_size(fonts)-780/20);
+    
+    var fname = "Fonts\"+fonts[|index];//string_copy(fonts[|index],1,string_length(fonts[|index])-4);
+    show_debug_message(fname);
+    
+    if(current_font != fnt_main)
+        font_delete(current_font);
+    current_font = font_add(fname,13,false,false,32,128);
+    draw_set_font(current_font);
+}
+
+if(keyboard_check_pressed(vk_escape))
+    instance_destroy();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>draw_rectangle_colour(x,y,x+800,y+600,c_dkgray,c_dkgray,c_dkgray,c_dkgray,false);
+
+draw_rectangle_colour(x,y,x+400,y+800,c_gray,c_gray,c_gray,c_gray,false);
+
+draw_rectangle_colour(x+410,y+400,x+790,y+590,c_gray,c_gray,c_gray,c_gray,false);
+
+for(var i = index; i&lt;index+780/20;i++)
+{
+    draw_text_colour(x+10,y+(i-index)*20,fonts[|i],c_white,c_white,c_white,c_white,1);
+}
 </string>
           </argument>
         </arguments>

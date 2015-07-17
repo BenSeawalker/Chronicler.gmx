@@ -215,10 +215,13 @@
       <object>objects\obj_popup</object>
       <object>objects\obj_displaylist</object>
       <object>objects\obj_completion</object>
-    </objects>
-    <objects name="Stats">
-      <object>objects\obj_stat_screen</object>
-      <object>objects\obj_stat</object>
+      <objects name="Stats">
+        <object>objects\obj_stats_screen</object>
+        <object>objects\obj_stat</object>
+        <object>objects\obj_stat_text</object>
+        <object>objects\obj_stat_percent</object>
+        <object>objects\obj_stat_opposed</object>
+      </objects>
     </objects>
     <object>objects\obj_font_picker</object>
   </objects>

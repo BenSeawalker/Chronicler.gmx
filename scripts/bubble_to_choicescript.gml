@@ -18,17 +18,22 @@ if(!processed[|index])
     {
         processed[|index] = true;
         
-        choiceScript += chr(10);
+        //choiceScript += chr(10);
         
         var make_label = (ds_map_size(links[|index]) > 1);
-        ///*
+        
         if(!make_label)
         {   
             var connecting_bubble = ds_map_find_first(links[|index]);
             if(connecting_bubble > -1)
             {
-                var ind = ds_list_find_index(bubbles,connecting_bubble);
-                make_label = ((ind > index) || (connections_from(connecting_bubble,id) > 1));
+                //if(!is_fake_choice(connecting_bubble))
+                //{
+                    var ind = ds_list_find_index(bubbles,connecting_bubble);
+                    make_label = ((ind > index) || (connections_from(connecting_bubble,id) > 1));
+                //}
+                //else
+                //    choiceScript += chr(10)+chr(10);
             }
         }
         else
@@ -39,7 +44,6 @@ if(!processed[|index])
                 choiceScript += chr(10)+chr(10);
             }
         }
-        //*/
         
         if(make_label)
             choiceScript += chr(10)+chr(10)+indent_str+"*label "+ get_label(scene,id) + chr(10);
@@ -63,27 +67,37 @@ if(!processed[|index])
             break;
             
             case obj_choice_bubble:
-                choiceScript += indent_str + "*choice";
-                    for(var ii=0;ii<ds_list_size(choices);ii++)
+                //var fake = is_fake_choice(id);
+                //if(fake)
+                //    choiceScript += indent_str + "*fake_choice";
+                //else
+                    choiceScript += indent_str + "*choice";
+                    
+                for(var ii=0;ii<ds_list_size(choices);ii++)
+                {
+                    with(choices[| ii])
                     {
-                        with(choices[| ii])
-                        {
-                            choiceScript += chr(10) + indent_str + indent;
-                            if(cbox.text!="")
-                                choiceScript += cbox.text+" ";
-                            choiceScript += "#"+tbox.text+chr(10);
+                        choiceScript += chr(10) + indent_str + indent;
+                        if(cbox.text!="")
+                            choiceScript += cbox.text+" ";
+                        choiceScript += "#"+tbox.text;
+                        
+                        //if(!fake)
+                       // {
+                            choiceScript += chr(10);
                             if(output.link != noone)
                             {
                                 var ind = ds_list_find_index(bubbles,output.link);
-                                if((connections_from(id,output.link) > 1) || (ds_map_size(links[|ind]) > 1 || (ind < index)))
+                                if((connections_from(other.id,output.link) > 1) || (ds_map_size(links[|ind]) > 1 || (ind < index)))
                                     choiceScript += indent_str + indent+indent+"*goto "+get_label(scene,output.link);
                                 else
                                    choiceScript += bubble_to_choicescript(bubbles,links,processed,ind,indent_level+2);
                             }
                             else
                                 choiceScript += indent_str + indent+indent+"*finish";
-                        }
+                        //}
                     }
+                }
             break;
             
             case obj_condition:

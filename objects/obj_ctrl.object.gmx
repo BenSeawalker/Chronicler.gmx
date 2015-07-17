@@ -465,11 +465,11 @@ var editing = textbox_focus;
 if(!instance_exists(obj_message_callback) &amp;&amp; !var_screen.visible &amp;&amp; (textbox_focus == -1 || (textbox_focus.single_line)))
 {
     var scale = 0.125;
-    if(mouse_wheel_down() || (keyboard_check_pressed(ord('Q'))))// &amp;&amp; !editing))
+    if(mouse_wheel_down() || ((textbox_focus == -1) &amp;&amp; keyboard_check_pressed(ord('Q'))))// &amp;&amp; !editing))
     {
         set_view_scale(max(view_scale-scale,scale));
     }
-    if(mouse_wheel_up() || (keyboard_check_pressed(ord('E'))))// &amp;&amp; !editing))
+    if(mouse_wheel_up() || ((textbox_focus == -1) &amp;&amp; keyboard_check_pressed(ord('E'))))// &amp;&amp; !editing))
     {
         set_view_scale(min(view_scale+scale,2));
     }

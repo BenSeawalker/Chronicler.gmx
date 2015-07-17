@@ -40,6 +40,7 @@ htxt = "";
 options = -1;
 
 is_textbubble = false;
+is_stat = false;
 
 lstsize = 0;
 </string>
@@ -254,11 +255,11 @@ if(active || tempactive)
     //weed out uneeded
     if(options == -1)
     {
-        if(!is_textbubble)
+        if(!is_textbubble &amp;&amp; !is_stat)
         {
             ds_list_copy(lst,actionlist);
         }
-        else
+        else if(is_textbubble &amp;&amp; !is_stat)
         {
             ds_list_add(lst,"*line_break");
             ds_list_add(lst,"*page_break");

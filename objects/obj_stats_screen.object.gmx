@@ -25,20 +25,19 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>width = view_wview[0] / 2;
-height = 64;
+            <string>stats = ds_list_create();
 
-options = ds_map_create();
 
-    ds_map_add(options,"type","text");
-    //ds_map_add(options,"name","");
-    //ds_map_add(options,"value","");
+instance_deactivate_all(true);
+instance_activate_object(obj_ctrl);
+instance_activate_object(obj_variable);
+instance_activate_object(obj_var_group);
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="0">
+    <event eventtype="1" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -55,23 +54,61 @@ options = ds_map_create();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>switch(options[?"type"])
+            <string>ds_list_destroy(stats);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///visible
+with(obj_stat) visible = other.visible;
+
+if(!visible) exit;
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///position
+for(var i=0;i&lt;ds_list_size(stats);i++)
 {
-    case "var":
-        
-    break;
-    
-    case "percent":
-        
-    break;
-    
-    case "opposed":
-        
-    break;
-    
-    case "text":
-        
-    break;
+    with(stats[|i])
+    {
+        x = x;
+        y = y+i*height;
+    }
 }
 </string>
           </argument>

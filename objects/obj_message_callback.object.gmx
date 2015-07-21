@@ -171,12 +171,12 @@ if(mouse_check_button_pressed(mb_left))
     var w = sprite_get_width(spr_icons);
     var h = sprite_get_height(spr_icons);
 
-    if(in_rect(window_mouse_get_x(),window_mouse_get_y(),room_width-w*2-10,0,w,h))
+    if(in_rect(window_mouse_get_x(),window_mouse_get_y(),view_wview[0]-w*2-10,0,w,h))
     {
         instance_activate_all();
         alarm[0] = 1;
     }
-    else if(in_rect(window_mouse_get_x(),window_mouse_get_y(),room_width-w-5,0,w,h))
+    else if(in_rect(window_mouse_get_x(),window_mouse_get_y(),view_wview[0]-w-5,0,w,h))
     {
         instance_activate_all();
         alarm[1] = 1;
@@ -214,19 +214,19 @@ textbox_draw(tbox,x+10,y+10,x+width-10,y+height-10,true);
 var w = sprite_get_width(spr_icons);
 
 var h1,h2;
-    h1 = in_rect(window_mouse_get_x(),window_mouse_get_y(),room_width-w*2-10,10,w,w)
-    h2 = in_rect(window_mouse_get_x(),window_mouse_get_y(),room_width-w-5,10,w,w)
+    h1 = in_rect(window_mouse_get_x(),window_mouse_get_y(),view_wview[0]-w*2-10,10,w,w)
+    h2 = in_rect(window_mouse_get_x(),window_mouse_get_y(),view_wview[0]-w-5,10,w,w)
     
-draw_sprite(spr_icons,68,room_width-w*2-10,10);
-draw_sprite(spr_icons,69,room_width-w-5,10);
+draw_sprite(spr_icons,68,view_wview[0]-w*2-10,10);
+draw_sprite(spr_icons,69,view_wview[0]-w-5,10);
 
 var c = c_black;
     if(h1) c = c_orange;
-draw_rectangle_colour(room_width-w*2-10,10,room_width-w*2-10+w,10+w,c,c,c,c,true);
+draw_rectangle_colour(view_wview[0]-w*2-10,10,view_wview[0]-w*2-10+w,10+w,c,c,c,c,true);
 
 c = c_black;
     if(h2) c = c_orange;
-draw_rectangle_colour(room_width-w-5,10,room_width-w-5+w,10+w,c,c,c,c,true);
+draw_rectangle_colour(view_wview[0]-w-5,10,view_wview[0]-w-5+w,10+w,c,c,c,c,true);
 </string>
           </argument>
         </arguments>

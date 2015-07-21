@@ -160,7 +160,7 @@ y2 = 10;
 var h1 = in_rect(window_mouse_get_x(),window_mouse_get_y(),x2,y2,x2+w,y2+h);
 var col = c_black;
     if(h1) col = c_orange;
-draw_sprite(spr_icons,68,room_width-w-5,y2);
+draw_sprite(spr_icons,68,view_wport[0]-w-5,y2);
 draw_rectangle_colour(x2,y2,x2+w,y2+w,col,col,col,col,true);
 
 //draw current_scene

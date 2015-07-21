@@ -267,6 +267,8 @@ new_project();
 ini_open("settings.ini");
     //read
     var successful = ini_read_real("autosave","shutdown",true);
+    var save_num = ini_read_real("autosave","save_num",1);
+    
     project_path = ini_read_string("project","last_save","");
     
     //write
@@ -276,12 +278,15 @@ ini_close();
 var cont = true;
 if(!successful)
 {
-    if(show_question("It appears that Chronicler did not shut down correctly the last time it was run.##Do you wish to load the last autosave?"))
+    if(file_exists("autosave"+string(save_num)+".chron"))
     {
-        load_chronicler_project("autosave.chron");
-        cont = false;
-        project_path = "";
-        save_path = "";
+        if(show_question("It appears that Chronicler did not shut down correctly the last time it was run.##Do you wish to load the last autosave?"))
+        {
+            load_chronicler_project("autosave"+string(save_num)+".chron");
+            cont = false;
+            project_path = "";
+            save_path = "";
+        }
     }
 }
 
@@ -320,7 +325,7 @@ if(cont)
           <argument>
             <kind>1</kind>
             <string>///autosave
-alarm[1] = room_speed*10;
+alarm[1] = room_speed*60;
 </string>
           </argument>
         </arguments>
@@ -352,9 +357,20 @@ if(mouse_check_button(mb_middle) || keyboard_check(vk_space) || var_screen.visib
     
 if(!var_screen.visible &amp;&amp; !instance_exists(obj_message_callback))
 {
+    
+    ini_open("settings.ini");
+        var max_saves = ini_read_real("autosave","max_saves",5);
+        var save_num = ini_read_real("autosave","save_num",0)+1;
+        if(save_num &gt; max_saves) save_num = 1;
+        
+        ini_write_real("autosave","save_num",save_num);
+        ini_write_real("autosave","max_saves",max_saves);
+    ini_close();
+    
+    
     var lst = data_to_list();
-        var f = file_text_open_write("autosave.chron");
-            file_text_write_string(f,ds_list_write(lst));
+        var f = file_text_open_write("autosave"+string(save_num)+".chron");
+            file_text_write_real(f,ds_list_write(lst));
         file_text_close(f);
     
     ds_list_destroy(lst);

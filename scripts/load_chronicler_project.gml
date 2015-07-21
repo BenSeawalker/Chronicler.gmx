@@ -35,7 +35,7 @@ if(lp != "" || dat)
     var lst = ds_list_create();
     if(!dat)
     {
-        if(lp == "autosave.chron")
+        if(string_pos("autosave",lp))
         {
             var file = file_text_open_read(lp);
                 ds_list_read(lst,file_text_read_string(file));
